@@ -1,12 +1,12 @@
-#ifndef TEAPOT_NODE_H_
-#define TEAPOT_NODE_H_
+#ifndef POINT_LIGHT_NEW_H_
+#define POINT_LIGHT_NEW_H_
 
 #include "gloo/SceneNode.hpp"
 
 namespace GLOO {
-class TeapotNode : public SceneNode {
+class PointLightNew : public SceneNode {
     public:
-        TeapotNode();
+        PointLightNew();
         void Update(double delta_time) override;
 };
 }

@@ -1040,4 +1040,5 @@ CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.o: \
   /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/lights/PointLight.hpp \
   /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/lights/AmbientLight.hpp \
   /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/cameras/BasicCameraNode.hpp \
-  /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/TeapotNode.hpp
+  /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/TeapotNode.hpp \
+  /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/PointLightNew.hpp

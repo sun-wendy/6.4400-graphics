@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.o"
   "CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.o.d"
+  "CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o"
+  "CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o.d"
   "CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o"
   "CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o.d"
   "CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o"

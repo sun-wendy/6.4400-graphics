@@ -224,6 +224,30 @@ assignment_code/assignment0/MeshViewerApp.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/assignment0.dir/build.make CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.s
 .PHONY : assignment_code/assignment0/MeshViewerApp.cpp.s
 
+assignment_code/assignment0/PointLightNew.o: assignment_code/assignment0/PointLightNew.cpp.o
+.PHONY : assignment_code/assignment0/PointLightNew.o
+
+# target to build an object file
+assignment_code/assignment0/PointLightNew.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/assignment0.dir/build.make CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o
+.PHONY : assignment_code/assignment0/PointLightNew.cpp.o
+
+assignment_code/assignment0/PointLightNew.i: assignment_code/assignment0/PointLightNew.cpp.i
+.PHONY : assignment_code/assignment0/PointLightNew.i
+
+# target to preprocess a source file
+assignment_code/assignment0/PointLightNew.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/assignment0.dir/build.make CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.i
+.PHONY : assignment_code/assignment0/PointLightNew.cpp.i
+
+assignment_code/assignment0/PointLightNew.s: assignment_code/assignment0/PointLightNew.cpp.s
+.PHONY : assignment_code/assignment0/PointLightNew.s
+
+# target to generate assembly for a file
+assignment_code/assignment0/PointLightNew.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/assignment0.dir/build.make CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.s
+.PHONY : assignment_code/assignment0/PointLightNew.cpp.s
+
 assignment_code/assignment0/TeapotNode.o: assignment_code/assignment0/TeapotNode.cpp.o
 .PHONY : assignment_code/assignment0/TeapotNode.o
 
@@ -1082,6 +1106,9 @@ help:
 	@echo "... assignment_code/assignment0/MeshViewerApp.o"
 	@echo "... assignment_code/assignment0/MeshViewerApp.i"
 	@echo "... assignment_code/assignment0/MeshViewerApp.s"
+	@echo "... assignment_code/assignment0/PointLightNew.o"
+	@echo "... assignment_code/assignment0/PointLightNew.i"
+	@echo "... assignment_code/assignment0/PointLightNew.s"
 	@echo "... assignment_code/assignment0/TeapotNode.o"
 	@echo "... assignment_code/assignment0/TeapotNode.i"
 	@echo "... assignment_code/assignment0/TeapotNode.s"

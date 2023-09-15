@@ -531,10 +531,24 @@ CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.s: cmak
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.s"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/MeshViewerApp.cpp -o CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.s
 
+CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o: CMakeFiles/assignment0.dir/flags.make
+CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o: /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/PointLightNew.cpp
+CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o: CMakeFiles/assignment0.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/wendysun/Desktop/computer_graphics/assignment0/build/assignment0/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o -MF CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o.d -o CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o -c /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/PointLightNew.cpp
+
+CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/PointLightNew.cpp > CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.i
+
+CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/PointLightNew.cpp -o CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.s
+
 CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o: CMakeFiles/assignment0.dir/flags.make
 CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o: /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/TeapotNode.cpp
 CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o: CMakeFiles/assignment0.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/wendysun/Desktop/computer_graphics/assignment0/build/assignment0/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/wendysun/Desktop/computer_graphics/assignment0/build/assignment0/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o -MF CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o.d -o CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o -c /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/TeapotNode.cpp
 
 CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.i: cmake_force
@@ -548,7 +562,7 @@ CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.s: cmake_f
 CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o: CMakeFiles/assignment0.dir/flags.make
 CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o: /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/main.cpp
 CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o: CMakeFiles/assignment0.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/wendysun/Desktop/computer_graphics/assignment0/build/assignment0/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/wendysun/Desktop/computer_graphics/assignment0/build/assignment0/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o -MF CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o.d -o CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o -c /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/main.cpp
 
 CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.i: cmake_force
@@ -562,7 +576,7 @@ CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.s: cmake_force
 CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.o: CMakeFiles/assignment0.dir/flags.make
 CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.o: /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/common/helpers.cpp
 CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.o: CMakeFiles/assignment0.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/wendysun/Desktop/computer_graphics/assignment0/build/assignment0/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/wendysun/Desktop/computer_graphics/assignment0/build/assignment0/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.o -MF CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.o.d -o CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.o -c /Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/common/helpers.cpp
 
 CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.i: cmake_force
@@ -608,6 +622,7 @@ assignment0_OBJECTS = \
 "CMakeFiles/assignment0.dir/external/src/imgui/examples/imgui_impl_glfw.cpp.o" \
 "CMakeFiles/assignment0.dir/external/src/imgui/examples/imgui_impl_opengl3.cpp.o" \
 "CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.o" \
+"CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o" \
 "CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o" \
 "CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o" \
 "CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.o"
@@ -648,13 +663,14 @@ assignment0: CMakeFiles/assignment0.dir/external/src/imgui/imgui_widgets.cpp.o
 assignment0: CMakeFiles/assignment0.dir/external/src/imgui/examples/imgui_impl_glfw.cpp.o
 assignment0: CMakeFiles/assignment0.dir/external/src/imgui/examples/imgui_impl_opengl3.cpp.o
 assignment0: CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.o
+assignment0: CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o
 assignment0: CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o
 assignment0: CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o
 assignment0: CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.o
 assignment0: CMakeFiles/assignment0.dir/build.make
 assignment0: external/src/glfw-3.3.2/src/libglfw3.a
 assignment0: CMakeFiles/assignment0.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/wendysun/Desktop/computer_graphics/assignment0/build/assignment0/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Linking CXX executable assignment0"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/wendysun/Desktop/computer_graphics/assignment0/build/assignment0/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Linking CXX executable assignment0"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/assignment0.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

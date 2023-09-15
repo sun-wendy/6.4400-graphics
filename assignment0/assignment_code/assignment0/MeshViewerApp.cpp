@@ -13,6 +13,7 @@
 #include "gloo/lights/AmbientLight.hpp"
 #include "gloo/cameras/BasicCameraNode.hpp"
 #include "TeapotNode.hpp"
+#include "PointLightNew.hpp"
 
 namespace GLOO {
 MeshViewerApp::MeshViewerApp(const std::string& app_name,
@@ -31,15 +32,15 @@ void MeshViewerApp::SetupScene() {
   auto ambient_light = std::make_shared<AmbientLight>();
   ambient_light->SetAmbientColor(glm::vec3(0.2f));
   root.CreateComponent<LightComponent>(ambient_light);
-
-  auto point_light = std::make_shared<PointLight>();
-  point_light->SetDiffuseColor(glm::vec3(0.8f, 0.8f, 0.8f));
-  point_light->SetSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f));
-  point_light->SetAttenuation(glm::vec3(1.0f, 0.09f, 0.032f));
-  auto point_light_node = make_unique<SceneNode>();
-  point_light_node->CreateComponent<LightComponent>(point_light);
-  point_light_node->GetTransform().SetPosition(glm::vec3(0.0f, 4.0f, 5.f));
-  root.AddChild(std::move(point_light_node));
+  
+  // auto point_light = std::make_shared<PointLight>();
+  // point_light->SetDiffuseColor(glm::vec3(0.8f, 0.8f, 0.8f));
+  // point_light->SetSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f));
+  // point_light->SetAttenuation(glm::vec3(1.0f, 0.09f, 0.032f));
+  // auto point_light_node = make_unique<SceneNode>();
+  // point_light_node->CreateComponent<LightComponent>(point_light);
+  // point_light_node->GetTransform().SetPosition(glm::vec3(0.0f, 4.0f, 5.f));
+  // root.AddChild(std::move(point_light_node));
 
   std::shared_ptr<PhongShader> shader = std::make_shared<PhongShader>();
   std::shared_ptr<VertexObject> mesh =
@@ -54,6 +55,7 @@ void MeshViewerApp::SetupScene() {
   // replace_with_teapot->GetTransform().SetRotation(glm::vec3(1.0f, 0.0f, 0.0f), 0.3f);
   // root.AddChild(std::move(replace_with_teapot));
 
-  root.AddChild(make_unique<TeapotNode>());
+  root.AddChild(make_unique<TeapotNode>());  // Change Teapot color
+  root.AddChild(make_unique<PointLightNew>());  // Change point light's position
 }
 }  // namespace GLOO

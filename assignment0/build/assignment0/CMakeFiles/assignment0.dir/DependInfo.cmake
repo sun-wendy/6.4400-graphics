@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/wendysun/Desktop/computer_graphics/assignment0/external/src/glad/src/glad.c" "CMakeFiles/assignment0.dir/external/src/glad/src/glad.c.o" "gcc" "CMakeFiles/assignment0.dir/external/src/glad/src/glad.c.o.d"
   "/Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/MeshViewerApp.cpp" "CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.o" "gcc" "CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.o.d"
+  "/Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/PointLightNew.cpp" "CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o" "gcc" "CMakeFiles/assignment0.dir/assignment_code/assignment0/PointLightNew.cpp.o.d"
   "/Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/TeapotNode.cpp" "CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o" "gcc" "CMakeFiles/assignment0.dir/assignment_code/assignment0/TeapotNode.cpp.o.d"
   "/Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/assignment0/main.cpp" "CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o" "gcc" "CMakeFiles/assignment0.dir/assignment_code/assignment0/main.cpp.o.d"
   "/Users/wendysun/Desktop/computer_graphics/assignment0/assignment_code/common/helpers.cpp" "CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.o" "gcc" "CMakeFiles/assignment0.dir/assignment_code/common/helpers.cpp.o.d"
