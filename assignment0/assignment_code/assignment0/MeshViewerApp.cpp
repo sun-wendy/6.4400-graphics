@@ -11,6 +11,7 @@
 #include "gloo/MeshLoader.hpp"
 #include "gloo/lights/PointLight.hpp"
 #include "gloo/lights/AmbientLight.hpp"
+#include "gloo/lights/DirectionalLight.hpp"
 #include "gloo/cameras/BasicCameraNode.hpp"
 #include "TeapotNode.hpp"
 #include "PointLightNew.hpp"
@@ -57,5 +58,14 @@ void MeshViewerApp::SetupScene() {
 
   root.AddChild(make_unique<TeapotNode>());  // Change Teapot color
   root.AddChild(make_unique<PointLightNew>());  // Change point light's position
+
+  // Test: Attach a Directional Light
+  auto directional_light = std::make_shared<DirectionalLight>();
+  directional_light->SetDiffuseColor(glm::vec3(0.8f, 0.8f, 0.8f));
+  directional_light->SetSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f));
+  auto directional_light_node = make_unique<SceneNode>();
+  directional_light_node->CreateComponent<LightComponent>(directional_light);
+  directional_light_node->GetTransform().SetRotation(glm::vec3(1.0f, 1.0f, 1.0f), 0.6f);
+  root.AddChild(std::move(directional_light_node));
 }
 }  // namespace GLOO

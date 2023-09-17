@@ -1038,6 +1038,7 @@ CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.o: /Use
   /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/gl_wrapper/VertexArray.hpp \
   /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/gl_wrapper/VertexBuffer.hpp \
   /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/lights/AmbientLight.hpp \
+  /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/lights/DirectionalLight.hpp \
   /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/lights/LightBase.hpp \
   /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/lights/PointLight.hpp \
   /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/parsers/ObjParser.hpp \
@@ -28419,6 +28420,8 @@ CMakeFiles/assignment0.dir/gloo/utils.cpp.o: /Users/wendysun/Desktop/computer_gr
 /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/limits.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__iterator/counted_iterator.h:
+
+/Users/wendysun/Desktop/computer_graphics/assignment0/gloo/lights/DirectionalLight.hpp:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__algorithm/sort.h:
 

@@ -1039,6 +1039,7 @@ CMakeFiles/assignment0.dir/assignment_code/assignment0/MeshViewerApp.cpp.o
  /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/gl_wrapper/VertexArray.hpp
  /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/gl_wrapper/VertexBuffer.hpp
  /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/lights/AmbientLight.hpp
+ /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/lights/DirectionalLight.hpp
  /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/lights/LightBase.hpp
  /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/lights/PointLight.hpp
  /Users/wendysun/Desktop/computer_graphics/assignment0/gloo/parsers/ObjParser.hpp
