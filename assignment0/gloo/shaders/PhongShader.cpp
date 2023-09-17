@@ -83,6 +83,7 @@ void PhongShader::SetLightSource(const LightComponent& component) const {
   // In a single rendering pass, only one light of one type is enabled.
   SetUniform("ambient_light.enabled", false);
   SetUniform("point_light.enabled", false);
+  SetUniform("directional_light.enabled", false);
 
   if (light_ptr->GetType() == LightType::Ambient) {
     auto ambient_light_ptr = static_cast<AmbientLight*>(light_ptr);
@@ -96,6 +97,12 @@ void PhongShader::SetLightSource(const LightComponent& component) const {
     SetUniform("point_light.diffuse", point_light_ptr->GetDiffuseColor());
     SetUniform("point_light.specular", point_light_ptr->GetSpecularColor());
     SetUniform("point_light.attenuation", point_light_ptr->GetAttenuation());
+  } else if (light_ptr->GetType() == LightType::Directional) {
+    SetUniform("directional_light.enabled", true);
+    SetUniform("directional_light.direction",
+               glm::normalize(component.GetNodePtr()->GetTransform().GetRotation() * glm::vec3(0, 0, -1)));
+    SetUniform("directional_light.diffuse", light_ptr->GetDiffuseColor());
+    SetUniform("directional_light.specular", light_ptr->GetSpecularColor());
   } else {
     throw std::runtime_error(
         "Encountered light type unrecognized by the shader!");

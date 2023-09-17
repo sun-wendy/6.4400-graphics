@@ -7,6 +7,7 @@ namespace GLOO {
 enum class LightType {
   Ambient,
   Point,
+  Directional,
 };
 
 class LightBase {

@@ -15,6 +15,13 @@ struct PointLight {
     vec3 attenuation;
 };
 
+struct DirectionalLight {
+    bool enabled;
+    vec3 direction;
+    vec3 diffuse;
+    vec3 specular;
+};
+
 struct Material {
     vec3 ambient;
     vec3 diffuse;
@@ -30,9 +37,11 @@ uniform vec3 camera_position;
 
 uniform Material material; // material properties of the object
 uniform AmbientLight ambient_light;
-uniform PointLight point_light; 
+uniform PointLight point_light;
+uniform DirectionalLight directional_light;
 vec3 CalcAmbientLight();
 vec3 CalcPointLight(vec3 normal, vec3 view_dir);
+vec3 CalcDirectionalLight(vec3 normal, vec3 view_dir);
 
 void main() {
     vec3 normal = normalize(world_normal);
@@ -46,6 +55,10 @@ void main() {
     
     if (point_light.enabled) {
         frag_color += vec4(CalcPointLight(normal, view_dir), 1.0);
+    }
+
+    if (directional_light.enabled) {
+        frag_color += vec4(CalcDirectionalLight(normal, view_dir), 1.0);
     }
 }
 
@@ -86,3 +99,18 @@ vec3 CalcPointLight(vec3 normal, vec3 view_dir) {
     return attenuation * (diffuse_color + specular_color);
 }
 
+vec3 CalcDirectionalLight(vec3 normal, vec3 view_dir) {
+    DirectionalLight light = directional_light;
+    vec3 light_dir = -light.direction;
+
+    float diffuse_intensity = max(dot(normal, light_dir), 0.0);
+    vec3 diffuse_color = diffuse_intensity * light.diffuse * GetDiffuseColor();
+
+    vec3 reflect_dir = reflect(-light_dir, normal);
+    float specular_intensity = pow(
+        max(dot(view_dir, reflect_dir), 0.0), material.shininess);
+    vec3 specular_color = specular_intensity * 
+        light.specular * GetSpecularColor();
+
+    return diffuse_color + specular_color;
+}
