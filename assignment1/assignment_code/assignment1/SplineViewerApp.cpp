@@ -65,5 +65,7 @@ void SplineViewerApp::LoadFile(const std::string& filename, SceneNode& root) {
   // control points are in control_points, a std::vector of glm::vec3 objects.
   // Depending on the specified spline type, create the appropriate node(s)
   // parameterized by the control points.
+  auto curve_node = make_unique<CurveNode>(control_points, SplineBasis::Bezier);
+  root.AddChild(std::move(curve_node));
 }
 }  // namespace GLOO

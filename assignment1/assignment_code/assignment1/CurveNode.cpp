@@ -9,10 +9,17 @@
 #include "gloo/InputManager.hpp"
 
 namespace GLOO {
-CurveNode::CurveNode() {
+CurveNode::CurveNode(std::vector<glm::vec3> control_points, SplineBasis spline_basis) {
   // TODO: this node should represent a single spline curve.
   // Think carefully about what data defines a curve and how you can
   // render it.
+  glm::mat4x3 matrix;
+  for (int i = 0; i < 4; i++) {
+    // std::cout<<control_points.size()<<std::endl;
+    matrix[i] = control_points[i];
+  }
+  control_pts_matrix_ = matrix;
+  spline_basis_ = spline_basis;
 
   // Initialize the VertexObjects and shaders used to render the control points,
   // the curve, and the tangent line.
@@ -24,6 +31,8 @@ CurveNode::CurveNode() {
 
   InitCurve();
   PlotCurve();
+  PlotControlPoints();
+  PlotTangentLine();
 }
 
 void CurveNode::Update(double delta_time) {
@@ -63,13 +72,35 @@ void CurveNode::ConvertGeometry() {
 
 CurvePoint CurveNode::EvalCurve(float t) {
   // TODO: implement evaluating the spline curve at parameter value t.
-  return CurvePoint();
+  glm::mat4x3 G = control_pts_matrix_;
+
+  glm::mat4x4 B;
+  if (spline_basis_ == SplineBasis::Bezier) {
+    B = glm::mat4x4(1, -3, 3, -1,
+                    0, 3, -6, 3,
+                    0, 0, 3, -3,
+                    0, 0, 0, 1);
+  } else {
+    B = glm::mat4x4(1/6, -1/2, 1/2, -1/6,
+                    2/3, 0, -1, 1/2,
+                    1/6, 1/2, 1/2, -1/2,
+                    0, 0, 0, 1/6);
+  }
+
+  glm::vec4 monomial = glm::vec4(1, t, t*t, t*t*t);
+
+  glm::vec3 P = G * B * monomial;
+  glm::vec4 d_monomial = glm::vec4(0, 1, 2*t, 3*t*t);
+  glm::vec3 dP = G * B * d_monomial;
+  glm::vec3 T = glm::normalize(dP);
+  return CurvePoint{P, T};
 }
 
 void CurveNode::InitCurve() {
   // TODO: create all of the  nodes and components necessary for rendering the
   // curve, its control points, and its tangent line. You will want to use the
   // VertexObjects and shaders that are initialized in the class constructor.
+  
 }
 
 void CurveNode::PlotCurve() {
@@ -78,6 +109,37 @@ void CurveNode::PlotCurve() {
 
 void CurveNode::PlotControlPoints() {
   // TODO: plot the curve control points.
+  auto point_node_one = make_unique<SceneNode>();
+  auto point_node_two = make_unique<SceneNode>();
+  auto point_node_three = make_unique<SceneNode>();
+  auto point_node_four = make_unique<SceneNode>();
+
+  point_node_one->GetTransform().SetPosition(control_pts_matrix_[0]);
+  point_node_two->GetTransform().SetPosition(control_pts_matrix_[1]);
+  point_node_three->GetTransform().SetPosition(control_pts_matrix_[2]);
+  point_node_four->GetTransform().SetPosition(control_pts_matrix_[3]);
+
+  point_node_one->CreateComponent<ShadingComponent>(shader_);
+  point_node_two->CreateComponent<ShadingComponent>(shader_);
+  point_node_three->CreateComponent<ShadingComponent>(shader_);
+  point_node_four->CreateComponent<ShadingComponent>(shader_);
+
+  auto& rc_one = point_node_one->CreateComponent<RenderingComponent>(sphere_mesh_);
+  auto& rc_two = point_node_two->CreateComponent<RenderingComponent>(sphere_mesh_);
+  auto& rc_three = point_node_three->CreateComponent<RenderingComponent>(sphere_mesh_);
+  auto& rc_four = point_node_four->CreateComponent<RenderingComponent>(sphere_mesh_);
+
+  glm::vec3 color(1.f, 1.f, 1.f);
+  auto material = std::make_shared<Material>(color, color, color, 0);
+  point_node_one->CreateComponent<MaterialComponent>(material);
+  point_node_two->CreateComponent<MaterialComponent>(material);
+  point_node_three->CreateComponent<MaterialComponent>(material);
+  point_node_four->CreateComponent<MaterialComponent>(material);
+
+  AddChild(std::move(point_node_one));
+  AddChild(std::move(point_node_two));
+  AddChild(std::move(point_node_three));
+  AddChild(std::move(point_node_four));
 }
 
 void CurveNode::PlotTangentLine() {

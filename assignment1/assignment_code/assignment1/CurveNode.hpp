@@ -19,7 +19,7 @@ struct CurvePoint {
 
 class CurveNode : public SceneNode {
  public:
-  CurveNode();
+  CurveNode(std::vector<glm::vec3> control_points, SplineBasis spline_basis);
   void Update(double delta_time) override;
 
  private:
@@ -31,6 +31,7 @@ class CurveNode : public SceneNode {
   void PlotControlPoints();
   void PlotTangentLine();
 
+  glm::mat4x3 control_pts_matrix_;
   SplineBasis spline_basis_;
 
   std::shared_ptr<VertexObject> sphere_mesh_;
