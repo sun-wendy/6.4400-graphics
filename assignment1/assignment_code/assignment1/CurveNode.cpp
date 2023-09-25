@@ -100,7 +100,36 @@ void CurveNode::InitCurve() {
   // TODO: create all of the  nodes and components necessary for rendering the
   // curve, its control points, and its tangent line. You will want to use the
   // VertexObjects and shaders that are initialized in the class constructor.
-  
+
+  auto polylines = std::make_shared<VertexObject>();
+
+  auto positions = make_unique<PositionArray>();
+  for (int i = 0; i < N_SUBDIV_; i++) {
+    float t = (float)i / (N_SUBDIV_ - 1);
+    CurvePoint curve_point = EvalCurve(t);
+    positions->push_back(curve_point.P);
+  }
+
+  auto indices = make_unique<IndexArray>();
+  for (int i = 0; i < N_SUBDIV_ - 1; i++) {
+    indices->push_back(i);
+    indices->push_back(i + 1);
+  }
+
+  polylines->UpdatePositions(std::move(positions));
+  polylines->UpdateIndices(std::move(indices));
+
+  auto polyline_node = make_unique<SceneNode>();
+  polyline_node->CreateComponent<ShadingComponent>(polyline_shader_);
+
+  auto& rc = polyline_node->CreateComponent<RenderingComponent>(polylines);
+  rc.SetDrawMode(DrawMode::Lines);
+
+  glm::vec3 color(1.f, 1.f, 0);
+  auto material = std::make_shared<Material>(color, color, color, 0);
+  polyline_node->CreateComponent<MaterialComponent>(material);
+
+  AddChild(std::move(polyline_node));
 }
 
 void CurveNode::PlotCurve() {
@@ -129,7 +158,7 @@ void CurveNode::PlotControlPoints() {
   auto& rc_three = point_node_three->CreateComponent<RenderingComponent>(sphere_mesh_);
   auto& rc_four = point_node_four->CreateComponent<RenderingComponent>(sphere_mesh_);
 
-  glm::vec3 color(1.f, 1.f, 1.f);
+  glm::vec3 color(1.f, 0, 0);
   auto material = std::make_shared<Material>(color, color, color, 0);
   point_node_one->CreateComponent<MaterialComponent>(material);
   point_node_two->CreateComponent<MaterialComponent>(material);
