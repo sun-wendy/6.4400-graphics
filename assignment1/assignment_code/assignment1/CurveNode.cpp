@@ -43,18 +43,25 @@ void CurveNode::Update(double delta_time) {
   if (InputManager::GetInstance().IsKeyPressed('T')) {
     if (prev_released) {
       // TODO: implement toggling spline bases.
+      ToggleSplineBasis();
     }
     prev_released = false;
   } else if (InputManager::GetInstance().IsKeyPressed('B')) {
     if (prev_released) {
       // TODO: implement converting conrol point geometry from Bezier to
       // B-Spline basis.
+      if (spline_basis_ == SplineBasis::Bezier) {
+        ConvertGeometry();
+      }
     }
     prev_released = false;
   } else if (InputManager::GetInstance().IsKeyPressed('Z')) {
     if (prev_released) {
       // TODO: implement converting conrol point geometry from B-Spline to
       // Bezier basis.
+      if (spline_basis_ == SplineBasis::BSpline) {
+        ConvertGeometry();
+      }
     }
     prev_released = false;
   } else {
@@ -64,6 +71,7 @@ void CurveNode::Update(double delta_time) {
 
 void CurveNode::ToggleSplineBasis() {
   // TODO: implement toggling between Bezier and B-Spline bases.
+
 }
 
 void CurveNode::ConvertGeometry() {
@@ -76,15 +84,9 @@ CurvePoint CurveNode::EvalCurve(float t) {
 
   glm::mat4x4 B;
   if (spline_basis_ == SplineBasis::Bezier) {
-    B = glm::mat4x4(1, -3, 3, -1,
-                    0, 3, -6, 3,
-                    0, 0, 3, -3,
-                    0, 0, 0, 1);
+    B = glm::mat4(1, 0, 0, 0, -3, 3, 0, 0, 3, -6, 3, 0, -1, 3, -3, 1);
   } else {
-    B = glm::mat4x4(1/6, -1/2, 1/2, -1/6,
-                    2/3, 0, -1, 1/2,
-                    1/6, 1/2, 1/2, -1/2,
-                    0, 0, 0, 1/6);
+    B = glm::mat4x4(1/6, 2/3, 1/6, 0, -1/2, 0, 1/2, 0, 1/2, -1, 1/2, 0, -1/6, 1/2, -1/2, 1/6);
   }
 
   glm::vec4 monomial = glm::vec4(1, t, t*t, t*t*t);
