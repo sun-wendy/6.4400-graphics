@@ -91,7 +91,7 @@ CurvePoint CurveNode::EvalCurve(float t) {
   if (spline_basis_ == SplineBasis::Bezier) {
     B = glm::mat4(1, 0, 0, 0, -3, 3, 0, 0, 3, -6, 3, 0, -1, 3, -3, 1);
   } else {
-    B = glm::mat4(1/6, 2/3, 1/6, 0, -1/2, 0, 1/2, 0, 1/2, -1, 1/2, 0, -1/6, 1/2, -1/2, 1/6);
+    B = glm::mat4(1/6.0, 2/3.0, 1/6.0, 0.0, -1/2.0, 0.0, 1/2.0, 0, 1/2.0, -1, 1/2.0, 0, -1/6.0, 1/2.0, -1/2.0, 1/6.0);
   }
 
   glm::vec4 monomial = glm::vec4(1, t, t*t, t*t*t);
