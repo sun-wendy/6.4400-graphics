@@ -30,7 +30,7 @@ CurveNode::CurveNode(std::vector<glm::vec3> control_points, SplineBasis spline_b
   polyline_shader_ = std::make_shared<SimpleShader>();
 
   InitCurve();
-  PlotCurve();
+  // PlotCurve();
   PlotControlPoints();
   PlotTangentLine();
 }
@@ -71,7 +71,12 @@ void CurveNode::Update(double delta_time) {
 
 void CurveNode::ToggleSplineBasis() {
   // TODO: implement toggling between Bezier and B-Spline bases.
-
+  if (spline_basis_ == SplineBasis::Bezier) {
+    spline_basis_ = SplineBasis::BSpline;
+  } else {
+    spline_basis_ = SplineBasis::Bezier;
+  }
+  PlotCurve();
 }
 
 void CurveNode::ConvertGeometry() {
@@ -86,7 +91,7 @@ CurvePoint CurveNode::EvalCurve(float t) {
   if (spline_basis_ == SplineBasis::Bezier) {
     B = glm::mat4(1, 0, 0, 0, -3, 3, 0, 0, 3, -6, 3, 0, -1, 3, -3, 1);
   } else {
-    B = glm::mat4x4(1/6, 2/3, 1/6, 0, -1/2, 0, 1/2, 0, 1/2, -1, 1/2, 0, -1/6, 1/2, -1/2, 1/6);
+    B = glm::mat4(1/6, 2/3, 1/6, 0, -1/2, 0, 1/2, 0, 1/2, -1, 1/2, 0, -1/6, 1/2, -1/2, 1/6);
   }
 
   glm::vec4 monomial = glm::vec4(1, t, t*t, t*t*t);
@@ -103,11 +108,9 @@ void CurveNode::InitCurve() {
   // curve, its control points, and its tangent line. You will want to use the
   // VertexObjects and shaders that are initialized in the class constructor.
 
-  auto polylines = std::make_shared<VertexObject>();
-
   auto positions = make_unique<PositionArray>();
   for (int i = 0; i < N_SUBDIV_; i++) {
-    float t = (float)i / (N_SUBDIV_ - 1);
+    float t = (float)i / (N_SUBDIV_);
     CurvePoint curve_point = EvalCurve(t);
     positions->push_back(curve_point.P);
   }
@@ -118,13 +121,13 @@ void CurveNode::InitCurve() {
     indices->push_back(i + 1);
   }
 
-  polylines->UpdatePositions(std::move(positions));
-  polylines->UpdateIndices(std::move(indices));
+  curve_polyline_->UpdatePositions(std::move(positions));
+  curve_polyline_->UpdateIndices(std::move(indices));
 
   auto polyline_node = make_unique<SceneNode>();
   polyline_node->CreateComponent<ShadingComponent>(polyline_shader_);
 
-  auto& rc = polyline_node->CreateComponent<RenderingComponent>(polylines);
+  auto& rc = polyline_node->CreateComponent<RenderingComponent>(curve_polyline_);
   rc.SetDrawMode(DrawMode::Lines);
 
   glm::vec3 color(1.f, 1.f, 0);
@@ -136,6 +139,13 @@ void CurveNode::InitCurve() {
 
 void CurveNode::PlotCurve() {
   // TODO: plot the curve by updating the positions of its VertexObject.
+  auto positions = make_unique<PositionArray>();
+  for (int i = 0; i < N_SUBDIV_; i++) {
+    float t = (float)i / (N_SUBDIV_);
+    CurvePoint curve_point = EvalCurve(t);
+    positions->push_back(curve_point.P);
+  }
+  curve_polyline_->UpdatePositions(std::move(positions));
 }
 
 void CurveNode::PlotControlPoints() {
