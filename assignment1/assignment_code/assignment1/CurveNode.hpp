@@ -34,13 +34,15 @@ class CurveNode : public SceneNode {
   glm::mat4x3 control_pts_matrix_;
   SplineBasis spline_basis_;
 
+  bool b_signal;
+
   std::shared_ptr<VertexObject> sphere_mesh_;
   std::shared_ptr<VertexObject> curve_polyline_;
   std::shared_ptr<VertexObject> tangent_line_;
-
   std::shared_ptr<ShaderProgram> shader_;
   std::shared_ptr<ShaderProgram> polyline_shader_;
 
+  std::vector<SceneNode*> control_point_nodes_;
 
   const int N_SUBDIV_ = 50;
 };
