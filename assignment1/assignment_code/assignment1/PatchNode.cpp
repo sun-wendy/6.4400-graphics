@@ -6,13 +6,16 @@
 #include "gloo/shaders/PhongShader.hpp"
 
 namespace GLOO {
-PatchNode::PatchNode() {
+PatchNode::PatchNode(std::vector<glm::vec3> control_points, SplineBasis spline_basis) {
   shader_ = std::make_shared<PhongShader>();
   patch_mesh_ = std::make_shared<VertexObject>();
 
   // TODO: this node should represent a single tensor product patch.
   // Think carefully about what data defines a patch and how you can
   // render it.
+  
+
+  PlotPatch();
 }
 
 

@@ -133,9 +133,10 @@ void CurveNode::InitCurve() {
   // TODO: create all of the  nodes and components necessary for rendering the
   // curve, its control points, and its tangent line. You will want to use the
   // VertexObjects and shaders that are initialized in the class constructor.
+
   auto positions = make_unique<PositionArray>();
   for (int i = 0; i < N_SUBDIV_; i++) {
-    float t = (float)i / (N_SUBDIV_);
+    float t = (float)i / (N_SUBDIV_-1);
     CurvePoint curve_point = EvalCurve(t);
     positions->push_back(curve_point.P);
   }
@@ -193,8 +194,15 @@ void CurveNode::PlotControlPoints() {
 
   control_point_nodes_.insert(control_point_nodes_.end(), {point_node_one.get(), point_node_two.get(), point_node_three.get(), point_node_four.get()});
 
-  glm::vec3 color(1.f, 0, 0);
-  auto material = std::make_shared<Material>(color, color, color, 0);
+  std::shared_ptr<Material> material;
+  if (spline_basis_ == SplineBasis::Bezier) {
+    glm::vec3 color(1.f, 0, 0);
+    material = std::make_shared<Material>(color, color, color, 0);
+  } else {
+    glm::vec3 color(0, 1.f, 0);
+    material = std::make_shared<Material>(color, color, color, 0);
+  }
+  // auto material = std::make_shared<Material>(color, color, color, 0);
 
   for (int i = 0; i < 4; i++) {
     control_point_nodes_[i]->GetTransform().SetPosition(control_pts_matrix_[i]);

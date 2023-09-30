@@ -41,7 +41,6 @@ class CurveNode : public SceneNode {
   std::shared_ptr<VertexObject> tangent_line_;
   std::shared_ptr<ShaderProgram> shader_;
   std::shared_ptr<ShaderProgram> polyline_shader_;
-
   std::vector<SceneNode*> control_point_nodes_;
 
   const int N_SUBDIV_ = 50;
