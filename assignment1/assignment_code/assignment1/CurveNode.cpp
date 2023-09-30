@@ -125,8 +125,7 @@ CurvePoint CurveNode::EvalCurve(float t) {
 
   glm::vec3 P = G * B * monomial;
   glm::vec4 d_monomial = glm::vec4(0, 1, 2*t, 3*t*t);
-  glm::vec3 dP = G * B * d_monomial;
-  glm::vec3 T = glm::normalize(dP);
+  glm::vec3 T = G * B * d_monomial;
   return CurvePoint{P, T};
 }
 
@@ -176,6 +175,13 @@ void CurveNode::PlotCurve() {
   for (int i = 0; i < 4; i++) {
     control_point_nodes_[i]->GetTransform().SetPosition(control_pts_matrix_[i]);
   }
+
+  auto tangent_positions = make_unique<PositionArray>();
+  float t_mid = 0.5;
+  CurvePoint curve_point = EvalCurve(t_mid);
+  tangent_positions->push_back(curve_point.P - (0.1f * glm::normalize(curve_point.T)));
+  tangent_positions->push_back(curve_point.P + (0.1f * glm::normalize(curve_point.T)));
+  tangent_line_->UpdatePositions(std::move(tangent_positions));
 }
 
 void CurveNode::PlotControlPoints() {
@@ -208,6 +214,33 @@ void CurveNode::PlotTangentLine() {
   // Below is a sample implementation for rendering a line segment
   // onto the screen. Note that this is just an example. This code
   // currently has nothing to do with the spline.
+
+  auto positions = make_unique<PositionArray>();
+  float t_mid = 0.5;
+  CurvePoint curve_point = EvalCurve(t_mid);
+  positions->push_back(curve_point.P - (0.1f * glm::normalize(curve_point.T)));
+  positions->push_back(curve_point.P + (0.1f * glm::normalize(curve_point.T)));
+
+  auto indices = make_unique<IndexArray>();
+  indices->push_back(0);
+  indices->push_back(1);
+
+  tangent_line_->UpdatePositions(std::move(positions));
+  tangent_line_->UpdateIndices(std::move(indices));
+
+  auto shader = std::make_shared<SimpleShader>();
+
+  auto tangent_line_node = make_unique<SceneNode>();
+  tangent_line_node->CreateComponent<ShadingComponent>(shader);
+
+  auto& rc = tangent_line_node->CreateComponent<RenderingComponent>(tangent_line_);
+  rc.SetDrawMode(DrawMode::Lines);
+
+  glm::vec3 color(1.f, 1.f, 1.f);
+  auto material = std::make_shared<Material>(color, color, color, 0);
+  tangent_line_node->CreateComponent<MaterialComponent>(material);
+
+  AddChild(std::move(tangent_line_node));
 
   // auto line = std::make_shared<VertexObject>();
 
