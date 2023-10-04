@@ -38,7 +38,6 @@ void PatchNode::Update(double delta_time) {
 
   // if (InputManager::GetInstance().IsKeyPressed('M')) {
   //   if (prev_released) {
-  // std::cout<<"Changing material color based on normal"<<std::endl;
   auto material = GetChild(0).GetComponentPtr<MaterialComponent>()->GetMaterial();
   PatchPoint patch_point = EvalPatch(0.5, 0.5);
   material.SetDiffuseColor(patch_point.N);
@@ -94,37 +93,16 @@ void PatchNode::PlotPatch() {
   auto indices = make_unique<IndexArray>();
 
   // TODO: fill "positions", "normals", and "indices"
-
-  // for (int i = 0; i < N_SUBDIV_; i++) {
-  //   float u = (float)i / (N_SUBDIV_-1);
-  //   for (int j = 0; j < N_SUBDIV_; j++) {
-  //     float v = (float)j / (N_SUBDIV_-1);
-  //     PatchPoint patch_point = EvalPatch(u, v);
-  //     positions->push_back(patch_point.P);
-  //     normals->push_back(patch_point.N);
-  //   }
-  // }
-
-  // for (int i = 0; i < N_SUBDIV_-1; i++) {
-  //   for (int j = 0; j < N_SUBDIV_-1; j++) {
-  //     indices->push_back(i*N_SUBDIV_ + j);
-  //     indices->push_back(i*N_SUBDIV_ + j + 1);
-  //     indices->push_back((i+1)*N_SUBDIV_ + j);
-  //     indices->push_back((i+1)*N_SUBDIV_ + j);
-  //     indices->push_back(i*N_SUBDIV_ + j + 1);
-  //     indices->push_back((i+1)*N_SUBDIV_ + j + 1);
-  //   }
-  // }
-
-  float width = 1.0f / N_SUBDIV_;
+  float width_triangle = 1.0f / N_SUBDIV_;
   for (int i = 0; i < N_SUBDIV_; i++) {
     for (int j = 0; j < N_SUBDIV_; j++) {
-      float left_u = (i + 1) * width;
-      float left_v = j * width;
+      float left_u = (i + 1) * width_triangle;
+      float left_v = j * width_triangle;
       PatchPoint p0 = EvalPatch(left_u, left_v);
-      PatchPoint p1 = EvalPatch(left_u, left_v + width);
-      PatchPoint p2 = EvalPatch(left_u - width, left_v);
-      PatchPoint p3 = EvalPatch(left_u - width, left_v + width);
+      PatchPoint p1 = EvalPatch(left_u, left_v + width_triangle);
+      PatchPoint p2 = EvalPatch(left_u - width_triangle, left_v);
+      PatchPoint p3 = EvalPatch(left_u - width_triangle, left_v + width_triangle);
+
       positions->push_back(p0.P);
       positions->push_back(p1.P);
       positions->push_back(p2.P);

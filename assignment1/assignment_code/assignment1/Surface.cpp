@@ -10,7 +10,6 @@ void Surface::Update(double delta_time) {
     static bool prev_released = true;
 
     if (InputManager::GetInstance().IsKeyPressed('M')) {
-        std::cout << "HERE" << std::endl;
         if (prev_released) {
             size_t child_count = GetChildrenCount();
             for (size_t i = 0; i < child_count; i++) {

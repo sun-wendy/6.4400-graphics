@@ -61,7 +61,6 @@ void SplineViewerApp::LoadFile(const std::string& filename, SceneNode& root) {
     control_points.push_back(glm::vec3(x, y, z));
   }
 
-  // Determine SplineBasis type
   SplineBasis spline_basis;
   if (spline_type == "Bezier curve" or spline_type == "Bezier patch") {
     spline_basis = SplineBasis::Bezier;
@@ -82,7 +81,7 @@ void SplineViewerApp::LoadFile(const std::string& filename, SceneNode& root) {
       if (control_points.size() > 4) {  // Multiple curves
         std::vector<glm::vec3> new_control_points;
         if (spline_basis == SplineBasis::Bezier) {
-          // Beizer: Each new control point shares one control point with the previous curve
+          // Beizer
           int num_curves = (control_points.size() + (control_points.size() / 4)) / 4;
           for (size_t i = 0; i < num_curves; i++) {
             new_control_points = {control_points[i*3], control_points[i*3+1], control_points[i*3+2], control_points[i*3+3]};
@@ -90,7 +89,7 @@ void SplineViewerApp::LoadFile(const std::string& filename, SceneNode& root) {
             root.AddChild(std::move(curve_node));
           }
         } else {
-          // B-Spline: Each new control point shares three control points with the previous curve
+          // B-Spline
           for (size_t i = 0; i < control_points.size() - 3; i++) {
             new_control_points = {control_points[i], control_points[i+1], control_points[i+2], control_points[i+3]};
             auto curve_node = make_unique<CurveNode>(new_control_points, spline_basis);
