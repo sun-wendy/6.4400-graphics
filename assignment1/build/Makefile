@@ -272,6 +272,30 @@ assignment_code/assignment1/SplineViewerApp.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/assignment1.dir/build.make CMakeFiles/assignment1.dir/assignment_code/assignment1/SplineViewerApp.cpp.s
 .PHONY : assignment_code/assignment1/SplineViewerApp.cpp.s
 
+assignment_code/assignment1/Surface.o: assignment_code/assignment1/Surface.cpp.o
+.PHONY : assignment_code/assignment1/Surface.o
+
+# target to build an object file
+assignment_code/assignment1/Surface.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/assignment1.dir/build.make CMakeFiles/assignment1.dir/assignment_code/assignment1/Surface.cpp.o
+.PHONY : assignment_code/assignment1/Surface.cpp.o
+
+assignment_code/assignment1/Surface.i: assignment_code/assignment1/Surface.cpp.i
+.PHONY : assignment_code/assignment1/Surface.i
+
+# target to preprocess a source file
+assignment_code/assignment1/Surface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/assignment1.dir/build.make CMakeFiles/assignment1.dir/assignment_code/assignment1/Surface.cpp.i
+.PHONY : assignment_code/assignment1/Surface.cpp.i
+
+assignment_code/assignment1/Surface.s: assignment_code/assignment1/Surface.cpp.s
+.PHONY : assignment_code/assignment1/Surface.s
+
+# target to generate assembly for a file
+assignment_code/assignment1/Surface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/assignment1.dir/build.make CMakeFiles/assignment1.dir/assignment_code/assignment1/Surface.cpp.s
+.PHONY : assignment_code/assignment1/Surface.cpp.s
+
 assignment_code/assignment1/main.o: assignment_code/assignment1/main.cpp.o
 .PHONY : assignment_code/assignment1/main.o
 
@@ -1112,6 +1136,9 @@ help:
 	@echo "... assignment_code/assignment1/SplineViewerApp.o"
 	@echo "... assignment_code/assignment1/SplineViewerApp.i"
 	@echo "... assignment_code/assignment1/SplineViewerApp.s"
+	@echo "... assignment_code/assignment1/Surface.o"
+	@echo "... assignment_code/assignment1/Surface.i"
+	@echo "... assignment_code/assignment1/Surface.s"
 	@echo "... assignment_code/assignment1/main.o"
 	@echo "... assignment_code/assignment1/main.i"
 	@echo "... assignment_code/assignment1/main.s"

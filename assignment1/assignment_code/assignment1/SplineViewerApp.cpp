@@ -9,6 +9,7 @@
 
 #include "CurveNode.hpp"
 #include "PatchNode.hpp"
+#include "Surface.hpp"
 
 namespace GLOO {
 
@@ -101,14 +102,17 @@ void SplineViewerApp::LoadFile(const std::string& filename, SceneNode& root) {
       root.AddChild(std::move(curve_node));
     }
   } else {  // Patch
+      auto surface = make_unique<Surface>();
       for (size_t i = 0; i < control_points.size() - 15; i += 16) {
         std::vector<glm::vec3> new_control_points;
-      for (size_t j = 0; j < 16; j++) {
-        new_control_points.push_back(control_points[i+j]);
+        for (size_t j = 0; j < 16; j++) {
+          new_control_points.push_back(control_points[i+j]);
+        }
+        auto patch_node = make_unique<PatchNode>(new_control_points, spline_basis);
+        // root.AddChild(std::move(patch_node));
+        surface->AddChild(std::move(patch_node));
       }
-      auto patch_node = make_unique<PatchNode>(new_control_points, spline_basis);
-      root.AddChild(std::move(patch_node));
-    }
+      root.AddChild(std::move(surface));
   }
 }
 }  // namespace GLOO

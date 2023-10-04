@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/assignment1.dir/assignment_code/assignment1/PatchNode.cpp.o.d"
   "CMakeFiles/assignment1.dir/assignment_code/assignment1/SplineViewerApp.cpp.o"
   "CMakeFiles/assignment1.dir/assignment_code/assignment1/SplineViewerApp.cpp.o.d"
+  "CMakeFiles/assignment1.dir/assignment_code/assignment1/Surface.cpp.o"
+  "CMakeFiles/assignment1.dir/assignment_code/assignment1/Surface.cpp.o.d"
   "CMakeFiles/assignment1.dir/assignment_code/assignment1/main.cpp.o"
   "CMakeFiles/assignment1.dir/assignment_code/assignment1/main.cpp.o.d"
   "CMakeFiles/assignment1.dir/assignment_code/common/helpers.cpp.o"
