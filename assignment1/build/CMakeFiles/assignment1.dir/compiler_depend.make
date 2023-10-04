@@ -2089,6 +2089,7 @@ CMakeFiles/assignment1.dir/assignment_code/assignment1/PatchNode.cpp.o: /Users/w
   /Users/wendysun/Desktop/computer-graphics/assignment1/external/src/imgui/examples/imgui_impl_opengl3.h \
   /Users/wendysun/Desktop/computer-graphics/assignment1/external/src/imgui/imconfig.h \
   /Users/wendysun/Desktop/computer-graphics/assignment1/external/src/imgui/imgui.h \
+  /Users/wendysun/Desktop/computer-graphics/assignment1/gloo/InputManager.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment1/gloo/Material.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment1/gloo/SceneNode.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment1/gloo/Transform.hpp \

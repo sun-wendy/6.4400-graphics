@@ -19,6 +19,7 @@ struct PatchPoint {
 class PatchNode : public SceneNode {
  public:
   PatchNode(std::vector<glm::vec3> control_points, SplineBasis spline_basis);
+  void Update(double delta_time) override;
 
  private:
   void PlotPatch();

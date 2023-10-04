@@ -102,7 +102,7 @@ void SplineViewerApp::LoadFile(const std::string& filename, SceneNode& root) {
     }
   } else {  // Patch
       for (size_t i = 0; i < control_points.size() - 15; i += 16) {
-      std::vector<glm::vec3> new_control_points;
+        std::vector<glm::vec3> new_control_points;
       for (size_t j = 0; j < 16; j++) {
         new_control_points.push_back(control_points[i+j]);
       }

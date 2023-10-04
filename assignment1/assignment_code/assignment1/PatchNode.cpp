@@ -4,6 +4,7 @@
 #include "gloo/components/ShadingComponent.hpp"
 #include "gloo/components/MaterialComponent.hpp"
 #include "gloo/shaders/PhongShader.hpp"
+#include "gloo/InputManager.hpp"
 
 namespace GLOO {
 PatchNode::PatchNode(std::vector<glm::vec3> control_points, SplineBasis spline_basis) {
@@ -30,6 +31,21 @@ PatchNode::PatchNode(std::vector<glm::vec3> control_points, SplineBasis spline_b
   shader_ = std::make_shared<PhongShader>();
 
   PlotPatch();
+}
+
+void PatchNode::Update(double delta_time) {
+  static bool prev_released = true;
+
+  if (InputManager::GetInstance().IsKeyPressed('M')) {
+    if (prev_released) {
+      std::cout<<"Changing material color based on normal"<<std::endl;
+      auto material = GetChild(0).GetComponentPtr<MaterialComponent>()->GetMaterial();
+      PatchPoint patch_point = EvalPatch(0.5, 0.5);
+      material.SetDiffuseColor(patch_point.N);
+      GetChild(0).GetComponentPtr<MaterialComponent>()->SetMaterial(std::make_shared<Material>(material));
+    }
+    prev_released = false;
+  }
 }
 
 PatchPoint PatchNode::EvalPatch(float u, float v) {
