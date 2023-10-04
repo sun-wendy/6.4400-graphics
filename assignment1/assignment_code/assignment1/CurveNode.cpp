@@ -249,32 +249,5 @@ void CurveNode::PlotTangentLine() {
   tangent_line_node->CreateComponent<MaterialComponent>(material);
 
   AddChild(std::move(tangent_line_node));
-
-  // auto line = std::make_shared<VertexObject>();
-
-  // auto positions = make_unique<PositionArray>();
-  // positions->push_back(glm::vec3(1.f, 0, -1.f));
-  // positions->push_back(glm::vec3(5.f, 5.f, 5.f));
-
-  // auto indices = make_unique<IndexArray>();
-  // indices->push_back(0);
-  // indices->push_back(1);
-
-  // line->UpdatePositions(std::move(positions));
-  // line->UpdateIndices(std::move(indices));
-
-  // auto shader = std::make_shared<SimpleShader>();
-
-  // auto line_node = make_unique<SceneNode>();
-  // line_node->CreateComponent<ShadingComponent>(shader);
-
-  // auto& rc = line_node->CreateComponent<RenderingComponent>(line);
-  // rc.SetDrawMode(DrawMode::Lines);
-
-  // glm::vec3 color(1.f, 1.f, 1.f);
-  // auto material = std::make_shared<Material>(color, color, color, 0);
-  // line_node->CreateComponent<MaterialComponent>(material);
-
-  // AddChild(std::move(line_node));
 }
 }  // namespace GLOO

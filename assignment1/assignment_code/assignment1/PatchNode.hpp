@@ -22,6 +22,7 @@ class PatchNode : public SceneNode {
 
  private:
   void PlotPatch();
+  PatchPoint EvalPatch(float u, float v);
 
   std::vector<glm::mat4> Gs_;
   SplineBasis spline_basis_;

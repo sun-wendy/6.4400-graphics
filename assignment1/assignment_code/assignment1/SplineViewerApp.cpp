@@ -60,45 +60,55 @@ void SplineViewerApp::LoadFile(const std::string& filename, SceneNode& root) {
     control_points.push_back(glm::vec3(x, y, z));
   }
 
-  // Convert spline_type from string to SplineBasis
+  // Determine SplineBasis type
   SplineBasis spline_basis;
-  if (spline_type == "Bezier curve") {
+  if (spline_type == "Bezier curve" or spline_type == "Bezier patch") {
     spline_basis = SplineBasis::Bezier;
-  } else if (spline_type == "B-Spline curve") {
+  } else if (spline_type == "B-Spline curve" or spline_type == "B-Spline patch") {
     spline_basis = SplineBasis::BSpline;
   } else {
     std::cerr << "ERROR: Spline basis type invalid" << std::endl;
     return;
   }
+
   // TODO: set up patch or curve nodes here.
   // The first line of the user-specified file is spline_type, and the specified
   // control points are in control_points, a std::vector of glm::vec3 objects.
   // Depending on the specified spline type, create the appropriate node(s)
   // parameterized by the control points.
-  // auto curve_node = make_unique<CurveNode>(control_points, spline_basis);
-  // root.AddChild(std::move(curve_node));
 
-  if (control_points.size() > 4) {
-    std::vector<glm::vec3> new_control_points;
-    if (spline_basis == SplineBasis::Bezier) {
-      // Each new control point shares one control point with the previous curve
-      int num_curves = (control_points.size() + (control_points.size() / 4)) / 4;
-      for (size_t i = 0; i < num_curves; i++) {
-        new_control_points = {control_points[i*3], control_points[i*3+1], control_points[i*3+2], control_points[i*3+3]};
-        auto curve_node = make_unique<CurveNode>(new_control_points, spline_basis);
-        root.AddChild(std::move(curve_node));
-      }
-    } else {
-      // Each new control point shares three control points with the previous curve
-      for (size_t i = 0; i < control_points.size() - 3; i++) {
-        new_control_points = {control_points[i], control_points[i+1], control_points[i+2], control_points[i+3]};
-        auto curve_node = make_unique<CurveNode>(new_control_points, spline_basis);
-        root.AddChild(std::move(curve_node));
-      }
+  if (spline_type == "Bezier curve" or spline_type == "B-Spline curve") {  // Curve
+      if (control_points.size() > 4) {  // Multiple curves
+        std::vector<glm::vec3> new_control_points;
+        if (spline_basis == SplineBasis::Bezier) {
+          // Beizer: Each new control point shares one control point with the previous curve
+          int num_curves = (control_points.size() + (control_points.size() / 4)) / 4;
+          for (size_t i = 0; i < num_curves; i++) {
+            new_control_points = {control_points[i*3], control_points[i*3+1], control_points[i*3+2], control_points[i*3+3]};
+            auto curve_node = make_unique<CurveNode>(new_control_points, spline_basis);
+            root.AddChild(std::move(curve_node));
+          }
+        } else {
+          // B-Spline: Each new control point shares three control points with the previous curve
+          for (size_t i = 0; i < control_points.size() - 3; i++) {
+            new_control_points = {control_points[i], control_points[i+1], control_points[i+2], control_points[i+3]};
+            auto curve_node = make_unique<CurveNode>(new_control_points, spline_basis);
+            root.AddChild(std::move(curve_node));
+          }
+        }
+    } else {  // Single curve
+      auto curve_node = make_unique<CurveNode>(control_points, spline_basis);
+      root.AddChild(std::move(curve_node));
     }
-  } else {
-    auto curve_node = make_unique<CurveNode>(control_points, spline_basis);
-    root.AddChild(std::move(curve_node));
+  } else {  // Patch
+      for (size_t i = 0; i < control_points.size() - 15; i += 16) {
+      std::vector<glm::vec3> new_control_points;
+      for (size_t j = 0; j < 16; j++) {
+        new_control_points.push_back(control_points[i+j]);
+      }
+      auto patch_node = make_unique<PatchNode>(new_control_points, spline_basis);
+      root.AddChild(std::move(patch_node));
+    }
   }
 }
 }  // namespace GLOO
