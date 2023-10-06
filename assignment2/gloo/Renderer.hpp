@@ -19,6 +19,7 @@ class Renderer {
   void RenderScene(const Scene& scene) const;
   void SetRenderingOptions() const;
 
+  void RecursiveRetrieve(const SceneNode& node, RenderingInfo& info, const glm::mat4& model_matrix) const;
   RenderingInfo RetrieveRenderingInfo(const Scene& scene) const;
 
 
