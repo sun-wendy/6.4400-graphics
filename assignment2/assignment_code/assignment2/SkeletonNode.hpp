@@ -33,6 +33,7 @@ class SkeletonNode : public SceneNode {
   DrawMode draw_mode_;
   // Euler angles of the UI sliders.
   std::vector<EulerAngle*> linked_angles_;
+  std::vector<SceneNode*> joint_nodes_;
 };
 }  // namespace GLOO
 

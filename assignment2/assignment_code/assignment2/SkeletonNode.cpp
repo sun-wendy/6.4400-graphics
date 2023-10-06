@@ -4,6 +4,8 @@
 #include "gloo/InputManager.hpp"
 #include "gloo/MeshLoader.hpp"
 
+#include <fstream>
+
 namespace GLOO {
 SkeletonNode::SkeletonNode(const std::string& filename)
     : SceneNode(), draw_mode_(DrawMode::Skeleton) {
@@ -77,6 +79,35 @@ void SkeletonNode::LinkRotationControl(const std::vector<EulerAngle*>& angles) {
 
 void SkeletonNode::LoadSkeletonFile(const std::string& path) {
   // TODO: load skeleton file and build the tree of joints.
+
+  std::fstream file;
+  file.open(path);
+
+  if (!file.is_open()) {
+    std::cerr << "Failed to open file: " << path << std::endl;
+    return;
+  } else {
+    std::cout << "Successfully opened file: " << path << std::endl;
+
+    std::string line;
+
+    while (std::getline(file, line)) {
+      std::stringstream ss(line);
+      float x, y, z;
+      int parent_id;
+      ss >> x >> y >> z >> parent_id;
+
+      auto cur_node = make_unique<SceneNode>();
+      joint_nodes_.push_back(cur_node.get());
+      if (parent_id == -1) {
+        AddChild(std::move(cur_node));
+      } else {
+        joint_nodes_[parent_id]->AddChild(std::move(cur_node));
+      }
+
+      cur_node->GetTransform().SetPosition(joint_nodes_[parent_id]->GetTransform().GetPosition() + glm::vec3(x, y, z));
+    }
+  }
 }
 
 void SkeletonNode::LoadMeshFile(const std::string& filename) {
