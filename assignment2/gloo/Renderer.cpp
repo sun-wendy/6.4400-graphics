@@ -44,7 +44,7 @@ void Renderer::RecursiveRetrieve(
       info.emplace_back(root_ptr, model_matrix);
     }
     auto children_count = node.GetChildrenCount();
-    for (int i = 0; i < children_count; i++) {
+    for (size_t i = 0; i < children_count; i++) {
       auto &child = node.GetChild(i);
       if (child.IsActive()) {
         RecursiveRetrieve(child, info, model_matrix * child.GetTransform().GetLocalToParentMatrix());

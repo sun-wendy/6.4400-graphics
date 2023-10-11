@@ -16,7 +16,7 @@ SkeletonNode::SkeletonNode(const std::string& filename)
   
   shader_ = std::make_shared<PhongShader>();
   sphere_mesh_ = PrimitiveFactory::CreateSphere(0.02f, 10, 10);
-  cylinder_mesh_ = PrimitiveFactory::CreateCylinder(0.015f, 0.05f, 10);
+  cylinder_mesh_ = PrimitiveFactory::CreateCylinder(0.01f, 1.0f, 25);
 
   LoadAllFiles(filename);
   DecorateTree();
@@ -66,6 +66,40 @@ void SkeletonNode::DecorateTree() {
     sphere_nodes_ptrs_.push_back(sphere_node.get());
     joint->AddChild(std::move(sphere_node));
   }
+
+  glm::vec3 root_pos = joint_nodes_[0]->GetTransform().GetPosition();
+
+  for (int i = 0; i < joint_nodes_.size(); i++) {
+    auto joint = joint_nodes_[i];
+    int children_count = joint->GetChildrenCount();
+    for (int j = 0; j < children_count; j++) {
+      auto& child = joint->GetChild(j);
+      auto cylinder_node = make_unique<SceneNode>();
+      cylinder_node->CreateComponent<ShadingComponent>(shader_);
+      cylinder_node->CreateComponent<RenderingComponent>(cylinder_mesh_);
+
+      // Set position
+      cylinder_node->GetTransform().SetPosition(glm::vec3(0, 0, 0));
+      
+      // Set rotation
+      glm::vec3 y_basis(0, 1.0f, 0);
+      glm::vec3 child_pos = child.GetTransform().GetPosition();
+      glm::vec3 axis = glm::normalize(glm::cross(y_basis, child_pos));
+      float angle = glm::acos(glm::dot(y_basis, child_pos) / glm::length(child_pos));
+      cylinder_node->GetTransform().SetRotation(axis, angle);
+      // glm::mat4 parent_to_local_mat = glm::inverse(joint->GetTransform().GetLocalToParentMatrix());
+      // glm::vec3 parent_pos = parent_to_local_mat * glm::vec4(glm::vec3(0), 1);
+      // glm::vec3 y = glm::normalize(parent_pos);
+      // glm::vec3 axis = glm::normalize(glm::cross(y_basis, y));
+      // float angle = glm::acos(glm::dot(y, y_basis));
+
+      // Set scale
+      float length = glm::distance(glm::vec3(0, 0, 0), child_pos);
+      cylinder_node->GetTransform().SetScale(glm::vec3(1.0f, length, 1.0f));
+
+      joint->AddChild(std::move(cylinder_node));
+    }
+  }
 }
 
 void SkeletonNode::Update(double delta_time) {
@@ -88,6 +122,12 @@ void SkeletonNode::OnJointChanged() {
   // The indices of linked_angles_ align with the order of the joints in .skel
   // files. For instance, *linked_angles_[0] corresponds to the first line of
   // the .skel file.
+
+  for (int i = 0; i < linked_angles_.size(); i++) {
+    auto joint = joint_nodes_[i];
+    auto euler_angle = linked_angles_[i];
+    joint->GetTransform().SetRotation(glm::quat(glm::vec3(euler_angle->rx, euler_angle->ry, euler_angle->rz)));
+  }
 }
 
 void SkeletonNode::LinkRotationControl(const std::vector<EulerAngle*>& angles) {
@@ -133,6 +173,8 @@ void SkeletonNode::LoadMeshFile(const std::string& filename) {
   std::shared_ptr<VertexObject> vtx_obj =
       MeshLoader::Import(filename).vertex_obj;
   // TODO: store the bind pose mesh in your preferred way.
+
+  
 }
 
 void SkeletonNode::LoadAttachmentWeights(const std::string& path) {
