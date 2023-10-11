@@ -34,6 +34,10 @@ class SkeletonNode : public SceneNode {
   // Euler angles of the UI sliders.
   std::vector<EulerAngle*> linked_angles_;
   std::vector<SceneNode*> joint_nodes_;
+  std::vector<SceneNode*> sphere_nodes_ptrs_;
+  std::shared_ptr<ShaderProgram> shader_;
+  std::shared_ptr<VertexObject> sphere_mesh_;
+  std::shared_ptr<VertexObject> cylinder_mesh_;
 };
 }  // namespace GLOO
 

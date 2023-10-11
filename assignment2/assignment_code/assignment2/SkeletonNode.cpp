@@ -3,12 +3,21 @@
 #include "gloo/utils.hpp"
 #include "gloo/InputManager.hpp"
 #include "gloo/MeshLoader.hpp"
+#include "gloo/debug/PrimitiveFactory.hpp"
+#include "gloo/shaders/PhongShader.hpp"
+#include "gloo/components/ShadingComponent.hpp"
+#include "gloo/components/RenderingComponent.hpp"
 
 #include <fstream>
 
 namespace GLOO {
 SkeletonNode::SkeletonNode(const std::string& filename)
     : SceneNode(), draw_mode_(DrawMode::Skeleton) {
+  
+  shader_ = std::make_shared<PhongShader>();
+  sphere_mesh_ = PrimitiveFactory::CreateSphere(0.02f, 10, 10);
+  cylinder_mesh_ = PrimitiveFactory::CreateCylinder(0.015f, 0.05f, 10);
+
   LoadAllFiles(filename);
   DecorateTree();
 
@@ -29,7 +38,7 @@ void SkeletonNode::DecorateTree() {
   // TODO: set up addtional nodes, add necessary components here.
   // You should create one set of nodes/components for skeleton mode
   // (spheres for joints and cylinders for bones), and another set for
-  // SSD mode (you could just use a single node with a RenderingComponent
+  // SSD node (you could just use a single node with a RenderingComponent
   // that is linked to a VertexObject with the mesh information. Then you
   // only need to update the VertexObject - updating vertex positions and
   // recalculating the normals, etc.).
@@ -49,6 +58,14 @@ void SkeletonNode::DecorateTree() {
   // sphere_node->CreateComponent<RenderingComponent>(sphere_mesh_);
   // sphere_nodes_ptrs_.push_back(sphere_node.get());
   // joint_ptr->AddChild(std::move(sphere_node));
+
+  for (auto joint : joint_nodes_) {
+    auto sphere_node = make_unique<SceneNode>();
+    sphere_node->CreateComponent<ShadingComponent>(shader_);
+    sphere_node->CreateComponent<RenderingComponent>(sphere_mesh_);
+    sphere_nodes_ptrs_.push_back(sphere_node.get());
+    joint->AddChild(std::move(sphere_node));
+  }
 }
 
 void SkeletonNode::Update(double delta_time) {
@@ -99,13 +116,15 @@ void SkeletonNode::LoadSkeletonFile(const std::string& path) {
 
       auto cur_node = make_unique<SceneNode>();
       joint_nodes_.push_back(cur_node.get());
+      cur_node->GetTransform().SetPosition(glm::vec3(x, y, z));
+
       if (parent_id == -1) {
         AddChild(std::move(cur_node));
       } else {
         joint_nodes_[parent_id]->AddChild(std::move(cur_node));
       }
 
-      cur_node->GetTransform().SetPosition(joint_nodes_[parent_id]->GetTransform().GetPosition() + glm::vec3(x, y, z));
+      // cur_node->GetTransform().SetPosition(joint_nodes_[parent_id]->GetTransform().GetPosition() + glm::vec3(x, y, z));
     }
   }
 }
