@@ -16,7 +16,7 @@ SkeletonNode::SkeletonNode(const std::string& filename)
   
   shader_ = std::make_shared<PhongShader>();
   sphere_mesh_ = PrimitiveFactory::CreateSphere(0.02f, 10, 10);
-  cylinder_mesh_ = PrimitiveFactory::CreateCylinder(0.01f, 1.0f, 25);
+  cylinder_mesh_ = PrimitiveFactory::CreateCylinder(0.015f, 1.0f, 25);
 
   LoadAllFiles(filename);
   DecorateTree();
@@ -174,11 +174,63 @@ void SkeletonNode::LoadMeshFile(const std::string& filename) {
       MeshLoader::Import(filename).vertex_obj;
   // TODO: store the bind pose mesh in your preferred way.
 
-  
+  std::string path = GetAssetDir() + filename;
+
+  std::fstream file;
+  file.open(path);
+
+  if (!file.is_open()) {
+    std::cerr << "Failed to open file: " << filename << std::endl;
+    return;
+  } else {
+    std::cout << "Successfully opened file: " << filename << std::endl;
+
+    std::string line;
+
+    while (std::getline(file, line)) {
+      std::stringstream ss(line);
+      std::string type;
+      ss >> type;
+
+      if (type == "v") {
+        float x, y, z;
+        ss >> x >> y >> z;
+        bind_vertices_.push_back(glm::vec3(x, y, z));
+      } else if (type == "f") {
+        int v1, v2, v3;
+        ss >> v1 >> v2 >> v3;
+        faces_.push_back(glm::vec3(v1, v2, v3));
+      }
+    }
+
+    cur_vertices_ = bind_vertices_;
+  }
 }
 
 void SkeletonNode::LoadAttachmentWeights(const std::string& path) {
   // TODO: load attachment weights.
+  
+  std::fstream file;
+  file.open(path);
+
+  if (!file.is_open()) {
+    std::cerr << "Failed to open file: " << path << std::endl;
+    return;
+  } else {
+    std::cout << "Successfully opened file: " << path << std::endl;
+
+    std::string line;
+
+    while (std::getline(file, line)) {
+      std::stringstream ss(line);
+      std::vector<float> row;
+      float single_weight;
+      while (ss >> single_weight) {
+        row.push_back(single_weight);
+      }
+      weights_.push_back(row);
+    }
+  }
 }
 
 void SkeletonNode::LoadAllFiles(const std::string& prefix) {

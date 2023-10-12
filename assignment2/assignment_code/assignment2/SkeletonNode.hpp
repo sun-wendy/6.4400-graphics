@@ -38,6 +38,11 @@ class SkeletonNode : public SceneNode {
   std::shared_ptr<ShaderProgram> shader_;
   std::shared_ptr<VertexObject> sphere_mesh_;
   std::shared_ptr<VertexObject> cylinder_mesh_;
+
+  std::vector<glm::vec3> bind_vertices_;
+  std::vector<glm::vec3> cur_vertices_;
+  std::vector<glm::vec3> faces_;
+  std::vector<std::vector<float>> weights_;
 };
 }  // namespace GLOO
 
