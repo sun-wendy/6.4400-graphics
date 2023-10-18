@@ -35,7 +35,7 @@ As I was trying out the texture mapping extra-credit problem, I referenced [this
 
 ### Known Problems with My Code
 
-There is no known problem with my code.
+There is no known problem with my code. **Screenshots of skeleton view & SSD view are in [the Images folder](/images/)**.
 <br><br>
 
 
