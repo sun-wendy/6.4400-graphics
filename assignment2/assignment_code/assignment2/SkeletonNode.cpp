@@ -19,8 +19,6 @@ SkeletonNode::SkeletonNode(const std::string& filename)
   cylinder_mesh_ = PrimitiveFactory::CreateCylinder(0.015f, 1.0f, 25);
   skin_mesh_ = std::make_shared<VertexObject>();
 
-  skin_node_ = make_unique<SceneNode>();
-
   LoadAllFiles(filename);
   DecorateTree();
 
@@ -44,7 +42,9 @@ void SkeletonNode::ToggleDrawMode() {
     for (auto cylinder_node : cylinder_nodes_ptrs_) {
       cylinder_node->SetActive(true);
     }
-    skin_node_->SetActive(false);
+    for (auto skin_node : skin_nodes_ptrs_) {
+      skin_node->SetActive(false);
+    }
   } else {
     for (auto sphere_node : sphere_nodes_ptrs_) {
       sphere_node->SetActive(false);
@@ -52,7 +52,9 @@ void SkeletonNode::ToggleDrawMode() {
     for (auto cylinder_node : cylinder_nodes_ptrs_) {
       cylinder_node->SetActive(false);
     }
-    skin_node_->SetActive(true);
+    for (auto skin_node : skin_nodes_ptrs_) {
+      skin_node->SetActive(true);
+    }
   }
 }
 
@@ -122,7 +124,7 @@ void SkeletonNode::DecorateTree() {
   auto final_normals = make_unique<NormalArray>();
   std::vector<glm::vec3> normals;
   auto indices = skin_mesh_->GetIndices();
-  std::vector<float> total_vtx_weight(bind_vertices_.size(), 0.0f);
+  std::vector<float> vtx_weights(bind_vertices_.size(), 0.0f);
 
   for (auto vertex : bind_vertices_) {
     normals.push_back(glm::vec3(0, 0, 0));
@@ -133,16 +135,14 @@ void SkeletonNode::DecorateTree() {
     int v2 = indices[i+2];
     int v3 = indices[i+1];
 
-    auto e1 = bind_vertices_[v1] - bind_vertices_[v2];
-    auto e2 = bind_vertices_[v3] - bind_vertices_[v2];
-    auto e1_e2 = glm::cross(e1, e2);
+    auto e1_e2 = glm::cross(bind_vertices_[v1] - bind_vertices_[v2], bind_vertices_[v3] - bind_vertices_[v2]);
     float length = glm::length(e1_e2);
     glm::vec3 face_normal = e1_e2 / length;
     float face_weight = 0.5 * length;
 
-    total_vtx_weight[v1] += face_weight;
-    total_vtx_weight[v2] += face_weight;
-    total_vtx_weight[v3] += face_weight;
+    vtx_weights[v1] += face_weight;
+    vtx_weights[v2] += face_weight;
+    vtx_weights[v3] += face_weight;
 
     normals[v1] += face_weight * face_normal;
     normals[v2] += face_weight * face_normal;
@@ -150,7 +150,7 @@ void SkeletonNode::DecorateTree() {
   }
 
   for (size_t j = 0; j < normals.size(); j++) {
-    normals[j] /= total_vtx_weight[j];
+    normals[j] /= vtx_weights[j];
   }
 
   for (auto single_normal : normals) {
@@ -159,10 +159,35 @@ void SkeletonNode::DecorateTree() {
 
   skin_mesh_->UpdateNormals(std::move(final_normals));
 
-  // skin_node_ = make_unique<SceneNode>();
-  skin_node_->CreateComponent<ShadingComponent>(shader_);
-  skin_node_->CreateComponent<RenderingComponent>(skin_mesh_);
-  AddChild(std::move(skin_node_));
+  // Draw skin mesh
+  auto skin_node = make_unique<SceneNode>();
+  skin_node->CreateComponent<ShadingComponent>(shader_);
+  skin_node->CreateComponent<RenderingComponent>(skin_mesh_);
+  skin_nodes_ptrs_.push_back(skin_node.get());
+  AddChild(std::move(skin_node));
+
+  // Draw mode initialization
+  if (draw_mode_ == DrawMode::Skeleton) {
+    for (auto sphere_node : sphere_nodes_ptrs_) {
+      sphere_node->SetActive(true);
+    }
+    for (auto cylinder_node : cylinder_nodes_ptrs_) {
+      cylinder_node->SetActive(true);
+    }
+    for (auto skin_node : skin_nodes_ptrs_) {
+      skin_node->SetActive(false);
+    }
+  } else {
+    for (auto sphere_node : sphere_nodes_ptrs_) {
+      sphere_node->SetActive(false);
+    }
+    for (auto cylinder_node : cylinder_nodes_ptrs_) {
+      cylinder_node->SetActive(false);
+    }
+    for (auto skin_node : skin_nodes_ptrs_) {
+      skin_node->SetActive(true);
+    }
+  }
 }
 
 
@@ -197,7 +222,6 @@ void SkeletonNode::OnJointChanged() {
 
   // Update skin mesh
   auto positions = make_unique<PositionArray>();
-  // auto normals = make_unique<NormalArray>();
 
   for (size_t i = 0; i < bind_vertices_.size(); i++) {
     glm::vec4 p(bind_vertices_[i], 1.0);
@@ -214,15 +238,14 @@ void SkeletonNode::OnJointChanged() {
   }
 
   skin_mesh_->UpdatePositions(std::move(positions));
-  positions.release();
 
-  // Calculate normals
-  auto new_positions = skin_mesh_->GetPositions();
+  // Update normals
+  auto new_pos = skin_mesh_->GetPositions();
   
   auto final_normals = make_unique<NormalArray>();
   std::vector<glm::vec3> normals;
   auto indices = skin_mesh_->GetIndices();
-  std::vector<float> total_vtx_weight(bind_vertices_.size(), 0.0f);
+  std::vector<float> new_vtx_weights(bind_vertices_.size(), 0.0f);
 
   for (auto vertex : bind_vertices_) {
     normals.push_back(glm::vec3(0, 0, 0));
@@ -233,16 +256,14 @@ void SkeletonNode::OnJointChanged() {
     int v2 = indices[i+2];
     int v3 = indices[i+1];
 
-    auto e1 = new_positions[v1] - new_positions[v2];
-    auto e2 = new_positions[v3] - new_positions[v2];
-    auto e1_e2 = glm::cross(e1, e2);
+    auto e1_e2 = glm::cross(new_pos[v1] - new_pos[v2], new_pos[v3] - new_pos[v2]);
     float length = glm::length(e1_e2);
     glm::vec3 face_normal = e1_e2 / length;
     float face_weight = 0.5 * length;
 
-    total_vtx_weight[v1] += face_weight;
-    total_vtx_weight[v2] += face_weight;
-    total_vtx_weight[v3] += face_weight;
+    new_vtx_weights[v1] += face_weight;
+    new_vtx_weights[v2] += face_weight;
+    new_vtx_weights[v3] += face_weight;
 
     normals[v1] += face_weight * face_normal;
     normals[v2] += face_weight * face_normal;
@@ -250,7 +271,7 @@ void SkeletonNode::OnJointChanged() {
   }
 
   for (size_t j = 0; j < normals.size(); j++) {
-    normals[j] /= total_vtx_weight[j];
+    normals[j] /= new_vtx_weights[j];
   }
 
   for (auto single_normal : normals) {
@@ -273,11 +294,9 @@ void SkeletonNode::LoadSkeletonFile(const std::string& path) {
   file.open(path);
 
   if (!file.is_open()) {
-    std::cerr << "Failed to open file: " << path << std::endl;
+    std::cerr << "Failed to open skeleton file" << std::endl;
     return;
   } else {
-    std::cout << "Successfully opened file: " << path << std::endl;
-
     std::string line;
 
     while (std::getline(file, line)) {
@@ -317,11 +336,9 @@ void SkeletonNode::LoadAttachmentWeights(const std::string& path) {
   file.open(path);
 
   if (!file.is_open()) {
-    std::cerr << "Failed to open file: " << path << std::endl;
+    std::cerr << "Failed to open attachment weights" << std::endl;
     return;
   } else {
-    std::cout << "Successfully opened file: " << path << std::endl;
-
     std::string line;
 
     while (std::getline(file, line)) {

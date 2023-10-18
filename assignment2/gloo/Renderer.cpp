@@ -40,9 +40,11 @@ void Renderer::RecursiveRetrieve(
   RenderingInfo& info,
   const glm::mat4& model_matrix) const {
     auto root_ptr = node.GetComponentPtr<RenderingComponent>();
+
     if (root_ptr != nullptr) {
       info.emplace_back(root_ptr, model_matrix);
     }
+    
     auto children_count = node.GetChildrenCount();
     for (size_t i = 0; i < children_count; i++) {
       auto &child = node.GetChild(i);

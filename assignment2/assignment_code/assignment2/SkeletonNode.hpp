@@ -36,7 +36,7 @@ class SkeletonNode : public SceneNode {
   std::vector<SceneNode*> joint_nodes_;
   std::vector<SceneNode*> sphere_nodes_ptrs_;
   std::vector<SceneNode*> cylinder_nodes_ptrs_;
-  std::unique_ptr<SceneNode> skin_node_;
+  std::vector<SceneNode*> skin_nodes_ptrs_;
   std::shared_ptr<ShaderProgram> shader_;
   std::shared_ptr<VertexObject> sphere_mesh_;
   std::shared_ptr<VertexObject> cylinder_mesh_;
