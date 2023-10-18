@@ -123,8 +123,8 @@ void SkeletonNode::DecorateTree() {
   // Calculate normals
   auto final_normals = make_unique<NormalArray>();
   std::vector<glm::vec3> normals;
-  auto indices = skin_mesh_->GetIndices();
   std::vector<float> vtx_weights(bind_vertices_.size(), 0.0f);
+  auto indices = skin_mesh_->GetIndices();
 
   for (auto vertex : bind_vertices_) {
     normals.push_back(glm::vec3(0, 0, 0));
@@ -156,7 +156,6 @@ void SkeletonNode::DecorateTree() {
   for (auto single_normal : normals) {
     final_normals->push_back(single_normal);
   }
-
   skin_mesh_->UpdateNormals(std::move(final_normals));
 
   // Draw skin mesh
@@ -244,8 +243,8 @@ void SkeletonNode::OnJointChanged() {
   
   auto final_normals = make_unique<NormalArray>();
   std::vector<glm::vec3> normals;
-  auto indices = skin_mesh_->GetIndices();
   std::vector<float> new_vtx_weights(bind_vertices_.size(), 0.0f);
+  auto indices = skin_mesh_->GetIndices();
 
   for (auto vertex : bind_vertices_) {
     normals.push_back(glm::vec3(0, 0, 0));
@@ -277,7 +276,6 @@ void SkeletonNode::OnJointChanged() {
   for (auto single_normal : normals) {
     final_normals->push_back(single_normal);
   }
-
   skin_mesh_->UpdateNormals(std::move(final_normals));
 }
 
@@ -294,7 +292,7 @@ void SkeletonNode::LoadSkeletonFile(const std::string& path) {
   file.open(path);
 
   if (!file.is_open()) {
-    std::cerr << "Failed to open skeleton file" << std::endl;
+    std::cerr << "Failed to load skeleton file" << std::endl;
     return;
   } else {
     std::string line;
@@ -336,7 +334,7 @@ void SkeletonNode::LoadAttachmentWeights(const std::string& path) {
   file.open(path);
 
   if (!file.is_open()) {
-    std::cerr << "Failed to open attachment weights" << std::endl;
+    std::cerr << "Failed to load attachment weights" << std::endl;
     return;
   } else {
     std::string line;
