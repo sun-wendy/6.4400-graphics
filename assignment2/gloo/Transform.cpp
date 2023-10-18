@@ -80,12 +80,11 @@ glm::mat4 Transform::GetLocalToParentMatrix() const {
 glm::mat4 Transform::GetLocalToAncestorMatrix(SceneNode* ancestor) const {
   // TODO: optionally implement this method which can become useful in SSD.
   
-  SceneNode* parent_node = node_.GetParentPtr();
-  
-  if (parent_node == ancestor) {
+  if (node_.GetParentPtr() == ancestor) {  // Base case: just parent
     return local_transform_mat_;
+  } else {
+    return node_.GetParentPtr()->GetTransform().GetLocalToAncestorMatrix(ancestor) * local_transform_mat_;
   }
-  return parent_node->GetTransform().GetLocalToAncestorMatrix(ancestor) * local_transform_mat_;
 }
 
 glm::mat4 Transform::GetLocalToWorldMatrix() const {

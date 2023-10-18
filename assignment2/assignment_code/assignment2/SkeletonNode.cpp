@@ -10,6 +10,9 @@
 
 #include <fstream>
 
+// #define STB_IMAGE_IMPLEMENTATION
+// #include "external/src/stb/stb_image.h"
+
 namespace GLOO {
 SkeletonNode::SkeletonNode(const std::string& filename)
     : SceneNode(), draw_mode_(DrawMode::Skeleton) {
@@ -68,6 +71,88 @@ void SkeletonNode::DecorateTree() {
   // only need to update the VertexObject - updating vertex positions and
   // recalculating the normals, etc.).
 
+  // // Create texture
+  // float vertices[] = {
+  //   // positions          // colors           // texture coords
+  //    0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+  //    0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+  //   -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+  //   -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+  // };
+  // unsigned int texture_indices[] = {  
+  //   0, 1, 3, // first triangle
+  //   1, 2, 3  // second triangle
+  // };
+
+  // // Shaders as strings
+  // const char *vertex_shader_source =
+  // "#version 330 core\n"
+  // "layout (location = 0) in vec3 aPos;\n"
+  // "layout (location = 1) in vec3 aColor;\n"
+  // "layout (location = 2) in vec2 aTexCoord;\n"
+  // "out vec3 ourColor;\n"
+  // "out vec2 TexCoord;\n"
+  // "void main()\n"
+  // "{\n"
+  // "   gl_Position = vec4(aPos, 1.0);\n"
+  // "   ourColor = aColor;\n"
+  // "   TexCoord = aTexCoord;\n"
+  // "}\0";
+
+  // const char *fragment_shader_source =
+  // "#version 330 core\n"
+  // "out vec4 FragColor;\n"
+  // "in vec3 ourColor;\n"
+  // "in vec2 TexCoord;\n"
+  // "uniform sampler2D ourTexture;\n"
+  // "void main()\n"
+  // "{\n"
+  // "   FragColor = texture(ourTexture, TexCoord);"
+  // "}\0";
+
+  // unsigned int VBO, VAO, EBO;
+  // glGenVertexArrays(1, &VAO);
+  // glGenBuffers(1, &VBO);
+  // glGenBuffers(1, &EBO);
+
+  // glBindVertexArray(VAO);
+
+  // glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+  // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(texture_indices), texture_indices, GL_STATIC_DRAW);
+
+  // // Position attribute
+  // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+  // glEnableVertexAttribArray(0);
+  // // Color attribute
+  // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+  // glEnableVertexAttribArray(1);
+  // // Texture coord attribute
+  // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+  // glEnableVertexAttribArray(2);
+
+  // unsigned int texture;
+  // glGenTextures(1, &texture);
+  // glBindTexture(GL_TEXTURE_2D, texture);
+  // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  // int width, height, nrChannels;
+  // unsigned char *data = stbi_load(FileSystem::getPath("texture.jpg").c_str(), &width, &height, &nrChannels, 0);
+  // if (data)
+  // {
+  //   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+  //   glGenerateMipmap(GL_TEXTURE_2D);
+  // }
+  // else
+  // {
+  //   std::cout << "Failed to load texture" << std::endl;
+  // }
+  // stbi_image_free(data);
+
   // Draw joints
   for (auto joint : joint_nodes_) {
     auto sphere_node = make_unique<SceneNode>();
@@ -113,7 +198,7 @@ void SkeletonNode::DecorateTree() {
     }
   }
 
-  // Calculate B_i^{-1} for each joint (only need to calculate once)
+  // Calculate B_i ^ {-1} for each joint (only need to calculate once)
   for (int i = 0; i < joint_nodes_.size(); i++) {
     glm::mat4 B_i = joint_nodes_[i]->GetTransform().GetLocalToWorldMatrix();
     glm::mat4 inv_B_i = glm::inverse(B_i);

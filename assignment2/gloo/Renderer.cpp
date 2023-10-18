@@ -40,7 +40,7 @@ void Renderer::RecursiveRetrieve(
   RenderingInfo& info,
   const glm::mat4& model_matrix) const {
     auto root_ptr = node.GetComponentPtr<RenderingComponent>();
-
+    
     if (root_ptr != nullptr) {
       info.emplace_back(root_ptr, model_matrix);
     }

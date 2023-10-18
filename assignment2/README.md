@@ -5,7 +5,7 @@ In this assignment, I implemented the following functionalities:
 * Rendered skeleton using hierarchical modeling:
   * Local-to-world transformation for all joints;
   * Optimization for computing transformation using an implicit matrix stack;
-  * Handled UI to update skeleton positions;
+  * Handled UI to update skeleton positions & rotations;
 
 * Implemented skeleton subspace deformation (SSD):
   * Attached skin mesh to skeleton, where each vertex is attached to neighboring joints according to attachment weights;
@@ -29,7 +29,7 @@ I went to Office Hours a couple times for debugging. I collaborated with Liane X
 
 ### References
 
-
+As I was trying out the texture mapping extra-credit problem, I referenced [this Learn OpenGL article](https://learnopengl.com/Getting-started/Textures), as well as [this YouTube video](https://www.youtube.com/watch?v=fdn1y5Yq424&ab_channel=LearningOpenGL).
 <br><br>
 
 
@@ -41,10 +41,10 @@ There is no known problem with my code.
 
 ### Extra Credit
 
-
+I attempted an easy extra-credit problem on texture mapping (but didn't really work).
 <br><br>
 
 
 ### Comments
 
-I enjoyed this assignment overall, as it really led me to understand the math underlying Bezier & B-Spline curves as well as patches. But the instructions for the last problem — creating two artifacts — were very vague, and I wasn't sure how to get started on computing control points for patches even though we could reference outside resources. It'd be better if it's an extra-credit problem.
+This assignment was super interesting — really enjoyed it!
