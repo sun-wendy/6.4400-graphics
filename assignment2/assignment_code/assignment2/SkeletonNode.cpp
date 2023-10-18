@@ -17,6 +17,9 @@ SkeletonNode::SkeletonNode(const std::string& filename)
   shader_ = std::make_shared<PhongShader>();
   sphere_mesh_ = PrimitiveFactory::CreateSphere(0.02f, 10, 10);
   cylinder_mesh_ = PrimitiveFactory::CreateCylinder(0.015f, 1.0f, 25);
+  skin_mesh_ = std::make_shared<VertexObject>();
+
+  skin_node_ = make_unique<SceneNode>();
 
   LoadAllFiles(filename);
   DecorateTree();
@@ -25,6 +28,7 @@ SkeletonNode::SkeletonNode(const std::string& filename)
   OnJointChanged();
 }
 
+
 void SkeletonNode::ToggleDrawMode() {
   draw_mode_ =
       draw_mode_ == DrawMode::Skeleton ? DrawMode::SSD : DrawMode::Skeleton;
@@ -32,7 +36,26 @@ void SkeletonNode::ToggleDrawMode() {
   // The current mode is draw_mode_;
   // Hint: you may find SceneNode::SetActive convenient here as
   // inactive nodes will not be picked up by the renderer.
+
+  if (draw_mode_ == DrawMode::Skeleton) {
+    for (auto sphere_node : sphere_nodes_ptrs_) {
+      sphere_node->SetActive(true);
+    }
+    for (auto cylinder_node : cylinder_nodes_ptrs_) {
+      cylinder_node->SetActive(true);
+    }
+    skin_node_->SetActive(false);
+  } else {
+    for (auto sphere_node : sphere_nodes_ptrs_) {
+      sphere_node->SetActive(false);
+    }
+    for (auto cylinder_node : cylinder_nodes_ptrs_) {
+      cylinder_node->SetActive(false);
+    }
+    skin_node_->SetActive(true);
+  }
 }
+
 
 void SkeletonNode::DecorateTree() {
   // TODO: set up addtional nodes, add necessary components here.
@@ -43,22 +66,7 @@ void SkeletonNode::DecorateTree() {
   // only need to update the VertexObject - updating vertex positions and
   // recalculating the normals, etc.).
 
-  // The code snippet below shows how to add a sphere node to a joint.
-  // Suppose you have created member variables shader_ of type
-  // std::shared_ptr<PhongShader>, and sphere_mesh_ of type
-  // std::shared_ptr<VertexObject>.
-  // Here sphere_nodes_ptrs_ is a std::vector<SceneNode*> that stores the
-  // pointer so the sphere nodes can be accessed later to change their
-  // positions. joint_ptr is assumed to be one of the joint node you created
-  // from LoadSkeletonFile (e.g. you've stored a std::vector<SceneNode*> of
-  // joint nodes as a member variable and joint_ptr is one of the elements).
-  //
-  // auto sphere_node = make_unique<SceneNode>();
-  // sphere_node->CreateComponent<ShadingComponent>(shader_);
-  // sphere_node->CreateComponent<RenderingComponent>(sphere_mesh_);
-  // sphere_nodes_ptrs_.push_back(sphere_node.get());
-  // joint_ptr->AddChild(std::move(sphere_node));
-
+  // Draw joints
   for (auto joint : joint_nodes_) {
     auto sphere_node = make_unique<SceneNode>();
     sphere_node->CreateComponent<ShadingComponent>(shader_);
@@ -69,6 +77,7 @@ void SkeletonNode::DecorateTree() {
 
   glm::vec3 root_pos = joint_nodes_[0]->GetTransform().GetPosition();
 
+  // Draw bones
   for (int i = 0; i < joint_nodes_.size(); i++) {
     auto joint = joint_nodes_[i];
     int children_count = joint->GetChildrenCount();
@@ -97,10 +106,65 @@ void SkeletonNode::DecorateTree() {
       float length = glm::distance(glm::vec3(0, 0, 0), child_pos);
       cylinder_node->GetTransform().SetScale(glm::vec3(1.0f, length, 1.0f));
 
+      cylinder_nodes_ptrs_.push_back(cylinder_node.get());
       joint->AddChild(std::move(cylinder_node));
     }
   }
+
+  // Calculate B_i^{-1} for each joint (only need to calculate once)
+  for (int i = 0; i < joint_nodes_.size(); i++) {
+    glm::mat4 B_i = joint_nodes_[i]->GetTransform().GetLocalToWorldMatrix();
+    glm::mat4 inv_B_i = glm::inverse(B_i);
+    inv_bind_transform_.push_back(inv_B_i);
+  }
+
+  // Calculate normals
+  auto final_normals = make_unique<NormalArray>();
+  std::vector<glm::vec3> normals;
+  auto indices = skin_mesh_->GetIndices();
+  std::vector<float> total_vtx_weight(bind_vertices_.size(), 0.0f);
+
+  for (auto vertex : bind_vertices_) {
+    normals.push_back(glm::vec3(0, 0, 0));
+  }
+
+  for (size_t i = 0; i < indices.size() - 2; i += 3) {
+    int v1 = indices[i];
+    int v2 = indices[i+2];
+    int v3 = indices[i+1];
+
+    auto e1 = bind_vertices_[v1] - bind_vertices_[v2];
+    auto e2 = bind_vertices_[v3] - bind_vertices_[v2];
+    auto e1_e2 = glm::cross(e1, e2);
+    float length = glm::length(e1_e2);
+    glm::vec3 face_normal = e1_e2 / length;
+    float face_weight = 0.5 * length;
+
+    total_vtx_weight[v1] += face_weight;
+    total_vtx_weight[v2] += face_weight;
+    total_vtx_weight[v3] += face_weight;
+
+    normals[v1] += face_weight * face_normal;
+    normals[v2] += face_weight * face_normal;
+    normals[v3] += face_weight * face_normal;
+  }
+
+  for (size_t j = 0; j < normals.size(); j++) {
+    normals[j] /= total_vtx_weight[j];
+  }
+
+  for (auto single_normal : normals) {
+    final_normals->push_back(single_normal);
+  }
+
+  skin_mesh_->UpdateNormals(std::move(final_normals));
+
+  // skin_node_ = make_unique<SceneNode>();
+  skin_node_->CreateComponent<ShadingComponent>(shader_);
+  skin_node_->CreateComponent<RenderingComponent>(skin_mesh_);
+  AddChild(std::move(skin_node_));
 }
+
 
 void SkeletonNode::Update(double delta_time) {
   // Prevent multiple toggle.
@@ -115,6 +179,7 @@ void SkeletonNode::Update(double delta_time) {
   }
 }
 
+
 void SkeletonNode::OnJointChanged() {
   // TODO: this method is called whenever the values of UI sliders change.
   // The new Euler angles (represented as EulerAngle struct) can be retrieved
@@ -123,16 +188,83 @@ void SkeletonNode::OnJointChanged() {
   // files. For instance, *linked_angles_[0] corresponds to the first line of
   // the .skel file.
 
+  // Update skeleton
   for (int i = 0; i < linked_angles_.size(); i++) {
     auto joint = joint_nodes_[i];
     auto euler_angle = linked_angles_[i];
     joint->GetTransform().SetRotation(glm::quat(glm::vec3(euler_angle->rx, euler_angle->ry, euler_angle->rz)));
   }
+
+  // Update skin mesh
+  auto positions = make_unique<PositionArray>();
+  // auto normals = make_unique<NormalArray>();
+
+  for (size_t i = 0; i < bind_vertices_.size(); i++) {
+    glm::vec4 p(bind_vertices_[i], 1.0);
+    glm::vec4 new_pos(0.0, 0.0, 0.0, 0.0);
+
+    for (size_t j = 0; j < weights_[0].size(); j++) {
+      float weight = weights_[i][j];
+      glm::mat4 T = joint_nodes_[j+1]->GetTransform().GetLocalToWorldMatrix();
+      glm::mat4 inv_B = inv_bind_transform_[j+1];
+      new_pos += weight * T * inv_B * p;
+    }
+
+    positions->push_back(glm::vec3(new_pos));
+  }
+
+  skin_mesh_->UpdatePositions(std::move(positions));
+  positions.release();
+
+  // Calculate normals
+  auto new_positions = skin_mesh_->GetPositions();
+  
+  auto final_normals = make_unique<NormalArray>();
+  std::vector<glm::vec3> normals;
+  auto indices = skin_mesh_->GetIndices();
+  std::vector<float> total_vtx_weight(bind_vertices_.size(), 0.0f);
+
+  for (auto vertex : bind_vertices_) {
+    normals.push_back(glm::vec3(0, 0, 0));
+  }
+
+  for (size_t i = 0; i < indices.size() - 2; i += 3) {
+    int v1 = indices[i];
+    int v2 = indices[i+2];
+    int v3 = indices[i+1];
+
+    auto e1 = new_positions[v1] - new_positions[v2];
+    auto e2 = new_positions[v3] - new_positions[v2];
+    auto e1_e2 = glm::cross(e1, e2);
+    float length = glm::length(e1_e2);
+    glm::vec3 face_normal = e1_e2 / length;
+    float face_weight = 0.5 * length;
+
+    total_vtx_weight[v1] += face_weight;
+    total_vtx_weight[v2] += face_weight;
+    total_vtx_weight[v3] += face_weight;
+
+    normals[v1] += face_weight * face_normal;
+    normals[v2] += face_weight * face_normal;
+    normals[v3] += face_weight * face_normal;
+  }
+
+  for (size_t j = 0; j < normals.size(); j++) {
+    normals[j] /= total_vtx_weight[j];
+  }
+
+  for (auto single_normal : normals) {
+    final_normals->push_back(single_normal);
+  }
+
+  skin_mesh_->UpdateNormals(std::move(final_normals));
 }
+
 
 void SkeletonNode::LinkRotationControl(const std::vector<EulerAngle*>& angles) {
   linked_angles_ = angles;
 }
+
 
 void SkeletonNode::LoadSkeletonFile(const std::string& path) {
   // TODO: load skeleton file and build the tree of joints.
@@ -163,49 +295,20 @@ void SkeletonNode::LoadSkeletonFile(const std::string& path) {
       } else {
         joint_nodes_[parent_id]->AddChild(std::move(cur_node));
       }
-
-      // cur_node->GetTransform().SetPosition(joint_nodes_[parent_id]->GetTransform().GetPosition() + glm::vec3(x, y, z));
     }
   }
 }
+
 
 void SkeletonNode::LoadMeshFile(const std::string& filename) {
   std::shared_ptr<VertexObject> vtx_obj =
       MeshLoader::Import(filename).vertex_obj;
   // TODO: store the bind pose mesh in your preferred way.
 
-  std::string path = GetAssetDir() + filename;
-
-  std::fstream file;
-  file.open(path);
-
-  if (!file.is_open()) {
-    std::cerr << "Failed to open file: " << filename << std::endl;
-    return;
-  } else {
-    std::cout << "Successfully opened file: " << filename << std::endl;
-
-    std::string line;
-
-    while (std::getline(file, line)) {
-      std::stringstream ss(line);
-      std::string type;
-      ss >> type;
-
-      if (type == "v") {
-        float x, y, z;
-        ss >> x >> y >> z;
-        bind_vertices_.push_back(glm::vec3(x, y, z));
-      } else if (type == "f") {
-        int v1, v2, v3;
-        ss >> v1 >> v2 >> v3;
-        faces_.push_back(glm::vec3(v1, v2, v3));
-      }
-    }
-
-    cur_vertices_ = bind_vertices_;
-  }
+  skin_mesh_ = vtx_obj;
+  bind_vertices_ = vtx_obj->GetPositions();
 }
+
 
 void SkeletonNode::LoadAttachmentWeights(const std::string& path) {
   // TODO: load attachment weights.
@@ -232,6 +335,7 @@ void SkeletonNode::LoadAttachmentWeights(const std::string& path) {
     }
   }
 }
+
 
 void SkeletonNode::LoadAllFiles(const std::string& prefix) {
   std::string prefix_full = GetAssetDir() + prefix;
