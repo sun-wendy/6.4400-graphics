@@ -14,6 +14,7 @@
 #include "gloo/cameras/ArcBallCameraNode.hpp"
 #include "gloo/debug/AxisNode.hpp"
 
+#include "SimpleNode.hpp"
 
 namespace GLOO {
 SimulationApp::SimulationApp(const std::string& app_name,
@@ -51,5 +52,9 @@ void SimulationApp::SetupScene() {
   point_light_node->CreateComponent<LightComponent>(point_light);
   point_light_node->GetTransform().SetPosition(glm::vec3(0.0f, 2.0f, 4.f));
   root.AddChild(std::move(point_light_node));
+
+  // Add a simple particle node
+  auto simple_node = make_unique<SimpleNode>(integrator_type_, integration_step_);
+  root.AddChild(std::move(simple_node));
 }
 }  // namespace GLOO

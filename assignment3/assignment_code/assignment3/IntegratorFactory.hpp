@@ -2,6 +2,8 @@
 #define INTEGRATOR_FACTORY_H_
 
 #include "IntegratorBase.hpp"
+#include "ForwardEulerIntegrator.hpp"
+#include "TrapezoidalIntegrator.hpp"
 
 #include <stdexcept>
 
@@ -15,7 +17,14 @@ class IntegratorFactory {
   template <class TSystem, class TState>
   static std::unique_ptr<IntegratorBase<TSystem, TState>> CreateIntegrator(
       IntegratorType type) {
-    return nullptr;
+    
+    if (type == IntegratorType::Euler) {
+      return make_unique<ForwardEulerIntegrator<TSystem, TState>>();
+    } else if (type == IntegratorType::Trapezoidal) {
+      return make_unique<TrapezoidalIntegrator<TSystem, TState>>();
+    } else {
+      throw std::runtime_error("Invalid integrator type");
+    }
   }
 };
 }  // namespace GLOO

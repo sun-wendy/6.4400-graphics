@@ -13,7 +13,10 @@ class ForwardEulerIntegrator : public IntegratorBase<TSystem, TState> {
     // TODO: Here we are returning the state at time t (which is NOT what we
     // want). Please replace the line below by the state at time t + dt using
     // forward Euler integration.
-    return state;
+
+    TState state_new = state;
+    state_new = state_new + dt * system.ComputeTimeDerivative(state_new, start_time);
+    return state_new;
   }
 };
 }  // namespace GLOO
