@@ -35,8 +35,8 @@ class ClothNode : public SceneNode {
                 }
             }
 
-            for (int i = 0; i < 6; i++) {
-                for (int j = 0; j < 6; j++) {
+            for (int j = 0; j < 6; j++) {
+                for (int i = 0; i < 6; i++) {
                     glm::vec3 pos(j * 0.5, -i * 0.05, i * 0.5);
                     int idx = system_.IndexOf(i, j);
                     sphere_nodes_[idx]->GetTransform().SetPosition(pos);
@@ -57,24 +57,24 @@ class ClothNode : public SceneNode {
             // Add structural springs
             for (int j = 0; j < 6; j++) {
                 for (int i = 0; i < 5; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), 0.5f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), 0.5f, 0.3f);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), 0.4f, 0.3f);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), 0.4f, 0.3f);
                 }
             }
 
             // Add shear springs
             for (int j = 0; j < 5; j++) {
                 for (int i = 0; i < 5; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), 0.5f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), 0.5f, 0.3f);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), 0.4f, 0.3f);
+                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), 0.4f, 0.3f);
                 }
             }
 
             // Add flex springs
             for (int j = 0; j < 6; j++) {
                 for (int i = 0; i < 4; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), 0.5f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), 0.5f, 0.3f);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), 0.4f, 0.3f);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), 0.4f, 0.3f);
                 }
             }
 
@@ -220,6 +220,8 @@ class ClothNode : public SceneNode {
                     Reset();
                 }
                 r_prev_released = false;
+            } else{
+                r_prev_released = true;
             }
         }
 
@@ -240,10 +242,6 @@ class ClothNode : public SceneNode {
                     glm::vec3 vel(0.0f);
                     state_.velocities.push_back(vel);
                     system_.AddMass(0.005f);
-
-                    if (i == 0) {
-                        system_.FixMass(idx);
-                    }
 
                     cloth_positions->push_back(pos);
                 }
