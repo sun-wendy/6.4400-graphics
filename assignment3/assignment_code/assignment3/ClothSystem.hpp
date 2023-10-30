@@ -1,13 +1,13 @@
-#ifndef PENDULUM_SYSTEM_H_
-#define PENDULUM_SYSTEM_H_
+#ifndef CLOTH_SYSTEM_H_
+#define CLOTH_SYSTEM_H_
 
 #include "ParticleState.hpp"
 #include "ParticleSystemBase.hpp"
 
 namespace GLOO {
-class PendulumSystem : public ParticleSystemBase {
+class ClothSystem : public ParticleSystemBase {
    public:
-      PendulumSystem() {}
+      ClothSystem() {}
       
       ParticleState ComputeTimeDerivative(const ParticleState& state, float time) const {
          std::vector<glm::vec3> velocities = state.velocities;
@@ -86,12 +86,23 @@ class PendulumSystem : public ParticleSystemBase {
          fixed_[node_i] = 1;
       }
 
+      int IndexOf(int i, int j) {
+         return i * sqrt(masses_.size()) + j;
+      }
+
+      // void RandomWind() {
+      //    // Add a random wind force to the cloth
+      //    // Add a random acceleration to all particles
+
+      // }
+
    private:
       std::vector<float> masses_;
       std::vector<int> fixed_;
       std::vector<std::vector<float>> rest_leng_;
       std::vector<std::vector<float>> spring_cons_;
       float drag_cons_ = 0.01f;
+      ParticleState derivative_;
 };
 }  // namespace GLOO
 

@@ -801,12 +801,17 @@ CMakeFiles/assignment3.dir/assignment_code/assignment3/SimulationApp.cpp.o: /Use
   /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include/stdarg.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include/stddef.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include/stdint.h \
+  /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/ClothNode.hpp \
+  /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/ClothSystem.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/ForwardEulerIntegrator.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/IntegratorBase.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/IntegratorFactory.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/IntegratorType.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/ParticleState.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/ParticleSystemBase.hpp \
+  /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/PendulumNode.hpp \
+  /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/PendulumSystem.hpp \
+  /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/RK4Integrator.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/SimpleNode.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/SimpleSystem.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/SimulationApp.hpp \
@@ -1083,6 +1088,7 @@ CMakeFiles/assignment3.dir/assignment_code/assignment3/SimulationApp.cpp.o: /Use
   /Users/wendysun/Desktop/computer-graphics/assignment3/external/src/imgui/imconfig.h \
   /Users/wendysun/Desktop/computer-graphics/assignment3/external/src/imgui/imgui.h \
   /Users/wendysun/Desktop/computer-graphics/assignment3/gloo/Application.hpp \
+  /Users/wendysun/Desktop/computer-graphics/assignment3/gloo/InputManager.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment3/gloo/Material.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment3/gloo/MeshData.hpp \
   /Users/wendysun/Desktop/computer-graphics/assignment3/gloo/MeshLoader.hpp \
@@ -27698,8 +27704,6 @@ CMakeFiles/assignment3.dir/gloo/utils.cpp.o: /Users/wendysun/Desktop/computer-gr
 
 /Users/wendysun/Desktop/computer-graphics/assignment3/external/src/stb/stb_image_write.h:
 
-/Users/wendysun/Desktop/computer-graphics/assignment3/gloo/InputManager.hpp:
-
 /Users/wendysun/Desktop/computer-graphics/assignment3/gloo/Application.cpp:
 
 /Users/wendysun/Desktop/computer-graphics/assignment3/gloo/cameras/ArcBallCameraNode.cpp:
@@ -27781,6 +27785,8 @@ CMakeFiles/assignment3.dir/gloo/utils.cpp.o: /Users/wendysun/Desktop/computer-gr
 /Users/wendysun/Desktop/computer-graphics/assignment3/gloo/MeshData.hpp:
 
 /Users/wendysun/Desktop/computer-graphics/assignment3/gloo/Material.hpp:
+
+/Users/wendysun/Desktop/computer-graphics/assignment3/gloo/InputManager.hpp:
 
 /Users/wendysun/Desktop/computer-graphics/assignment3/external/src/imgui/imconfig.h:
 
@@ -28040,6 +28046,10 @@ CMakeFiles/assignment3.dir/gloo/utils.cpp.o: /Users/wendysun/Desktop/computer-gr
 
 /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/SimpleNode.hpp:
 
+/Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/PendulumSystem.hpp:
+
+/Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/PendulumNode.hpp:
+
 /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/ParticleState.hpp:
 
 /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/IntegratorFactory.hpp:
@@ -28047,6 +28057,8 @@ CMakeFiles/assignment3.dir/gloo/utils.cpp.o: /Users/wendysun/Desktop/computer-gr
 /Users/wendysun/Desktop/computer-graphics/assignment3/external/src/glm-0.9.9.8/glm/detail/type_float.hpp:
 
 /Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/ForwardEulerIntegrator.hpp:
+
+/Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/ClothSystem.hpp:
 
 /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include/stdint.h:
 
@@ -28271,6 +28283,8 @@ CMakeFiles/assignment3.dir/gloo/utils.cpp.o: /Users/wendysun/Desktop/computer-gr
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk/usr/include/c++/v1/sstream:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk/usr/include/c++/v1/ratio:
+
+/Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/ClothNode.hpp:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk/usr/include/c++/v1/optional:
 
@@ -29783,6 +29797,8 @@ CMakeFiles/assignment3.dir/gloo/utils.cpp.o: /Users/wendysun/Desktop/computer-gr
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk/usr/include/c++/v1/__algorithm/generate.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk/usr/include/arm/arch.h:
+
+/Users/wendysun/Desktop/computer-graphics/assignment3/assignment_code/assignment3/RK4Integrator.hpp:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk/usr/include/_types/_uint32_t.h:
 

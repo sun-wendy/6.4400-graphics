@@ -16,11 +16,11 @@ namespace GLOO {
 class SimpleNode : public SceneNode {
     public:
         SimpleNode(IntegratorType type, float step_size) {
-            std::shared_ptr<VertexObject> sphere_mesh = PrimitiveFactory::CreateSphere(0.1f, 20, 20);
+            std::shared_ptr<VertexObject> sphere_mesh = PrimitiveFactory::CreateSphere(0.05f, 20, 20);
             std::shared_ptr<ShaderProgram> shader = std::make_shared<PhongShader>();
 
             auto sphere_node = make_unique<SceneNode>();
-            sphere_node->GetTransform().SetPosition(glm::vec3(0, 0, 0));
+            sphere_node->GetTransform().SetPosition(glm::vec3(-1, 1, 1));
             sphere_node->CreateComponent<ShadingComponent>(shader);
             sphere_node->CreateComponent<RenderingComponent>(sphere_mesh);
 
@@ -28,16 +28,12 @@ class SimpleNode : public SceneNode {
             AddChild(std::move(sphere_node));
 
             state_ = ParticleState();
-            state_.positions.push_back(glm::vec3(0, 1, 1));
+            state_.positions.push_back(glm::vec3(-1, 1, 1));
             state_.velocities.push_back(glm::vec3(0, 0, 0));
             system_ = SimpleSystem();
 
             type_ = type;
-            if (type_ == IntegratorType::Euler) {
-                integrator_ = IntegratorFactory::CreateIntegrator<SimpleSystem, ParticleState>(IntegratorType::Euler);
-            } else {
-                integrator_ = IntegratorFactory::CreateIntegrator<SimpleSystem, ParticleState>(IntegratorType::Trapezoidal);
-            }
+            integrator_ = IntegratorFactory::CreateIntegrator<SimpleSystem, ParticleState>(type_);
 
             step_size_ = step_size;
             time_ = 0.0;

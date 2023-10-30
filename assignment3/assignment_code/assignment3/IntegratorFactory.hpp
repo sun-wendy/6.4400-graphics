@@ -4,6 +4,7 @@
 #include "IntegratorBase.hpp"
 #include "ForwardEulerIntegrator.hpp"
 #include "TrapezoidalIntegrator.hpp"
+#include "RK4Integrator.hpp"
 
 #include <stdexcept>
 
@@ -22,6 +23,8 @@ class IntegratorFactory {
       return make_unique<ForwardEulerIntegrator<TSystem, TState>>();
     } else if (type == IntegratorType::Trapezoidal) {
       return make_unique<TrapezoidalIntegrator<TSystem, TState>>();
+    } else if (type == IntegratorType::RK4) {
+      return make_unique<RK4Integrator<TSystem, TState>>();
     } else {
       throw std::runtime_error("Invalid integrator type");
     }
