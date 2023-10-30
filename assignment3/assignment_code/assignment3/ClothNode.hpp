@@ -17,7 +17,7 @@ namespace GLOO {
 class ClothNode : public SceneNode {
     public:
         ClothNode(IntegratorType type, float step_size) {
-            sphere_mesh_ = PrimitiveFactory::CreateSphere(0.05f, 20, 20);
+            sphere_mesh_ = PrimitiveFactory::CreateSphere(0.03f, 20, 20);
             shader_ = std::make_shared<PhongShader>();
 
             state_ = ParticleState();
@@ -37,15 +37,17 @@ class ClothNode : public SceneNode {
 
             for (int j = 0; j < 6; j++) {
                 for (int i = 0; i < 6; i++) {
-                    glm::vec3 pos(j * 0.5, -i * 0.05, i * 0.5);
+                    glm::vec3 pos((j + 2) * 0.5, -i * 0.05, i * 0.5);
                     int idx = system_.IndexOf(i, j);
                     sphere_nodes_[idx]->GetTransform().SetPosition(pos);
                     state_.positions.push_back(pos);
+                    initial_pos_.push_back(pos);
 
                     glm::vec3 vel(0.0f);
                     state_.velocities.push_back(vel);
-                    system_.AddMass(0.005f);
+                    initial_vel_.push_back(vel);
 
+                    system_.AddMass(0.005f);
                     if (i == 0) {
                         system_.FixMass(idx);
                     }
@@ -80,7 +82,6 @@ class ClothNode : public SceneNode {
 
             type_ = type;
             integrator_ = IntegratorFactory::CreateIntegrator<ClothSystem, ParticleState>(type_);
-
             step_size_ = step_size;
             time_ = 0.0;
 
@@ -230,24 +231,17 @@ class ClothNode : public SceneNode {
             state_ = ParticleState();
             system_ = ClothSystem();
 
-            auto cloth_positions = make_unique<PositionArray>();
+            auto reset_positions = make_unique<PositionArray>();
 
-            for (int j = 0; j < 6; j++) {
-                for (int i = 0; i < 6; i++) {
-                    glm::vec3 pos(j * 0.5, -i * 0.05, i * 0.5);
-                    int idx = system_.IndexOf(i, j);
-                    sphere_nodes_[idx]->GetTransform().SetPosition(pos);
-                    state_.positions.push_back(pos);
-
-                    glm::vec3 vel(0.0f);
-                    state_.velocities.push_back(vel);
-                    system_.AddMass(0.005f);
-
-                    cloth_positions->push_back(pos);
-                }
+            for (int i = 0; i < initial_pos_.size(); i++) {
+                sphere_nodes_[i]->GetTransform().SetPosition(initial_pos_[i]);
+                state_.positions.push_back(initial_pos_[i]);
+                state_.velocities.push_back(initial_vel_[i]);
+                system_.AddMass(0.005f);
+                reset_positions->push_back(initial_pos_[i]);
             }
 
-            // Add structural springs
+            // Reset structural springs
             for (int j = 0; j < 6; j++) {
                 for (int i = 0; i < 5; i++) {
                     system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), 0.5f, 0.3f);
@@ -255,7 +249,7 @@ class ClothNode : public SceneNode {
                 }
             }
 
-            // Add shear springs
+            // Reset shear springs
             for (int j = 0; j < 5; j++) {
                 for (int i = 0; i < 5; i++) {
                     system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), 0.5f, 0.3f);
@@ -263,7 +257,7 @@ class ClothNode : public SceneNode {
                 }
             }
 
-            // Add flex springs
+            // Reset flex springs
             for (int j = 0; j < 6; j++) {
                 for (int i = 0; i < 4; i++) {
                     system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), 0.5f, 0.3f);
@@ -271,7 +265,7 @@ class ClothNode : public SceneNode {
                 }
             }
 
-            cloth_mesh_->UpdatePositions(std::move(cloth_positions));
+            cloth_mesh_->UpdatePositions(std::move(reset_positions));
 
             time_ = 0.0;
         }
@@ -289,6 +283,9 @@ class ClothNode : public SceneNode {
         std::shared_ptr<ShaderProgram> shader_;
 
         std::shared_ptr<VertexObject> cloth_mesh_;
+
+        std::vector<glm::vec3> initial_pos_;
+        std::vector<glm::vec3> initial_vel_;
 };
 }  // namespace GLOO
 

@@ -56,12 +56,12 @@ void SimulationApp::SetupScene() {
   root.AddChild(std::move(point_light_node));
 
   // Add a simple particle node
-  // auto simple_node = make_unique<SimpleNode>(integrator_type_, integration_step_);
-  // root.AddChild(std::move(simple_node));
+  auto simple_node = make_unique<SimpleNode>(integrator_type_, integration_step_);
+  root.AddChild(std::move(simple_node));
 
   // Add a pendulum node
-  // auto pendulum_node = make_unique<PendulumNode>(integrator_type_, integration_step_);
-  // root.AddChild(std::move(pendulum_node));
+  auto pendulum_node = make_unique<PendulumNode>(integrator_type_, integration_step_);
+  root.AddChild(std::move(pendulum_node));
 
   // Add a cloth node
   auto cloth_node = make_unique<ClothNode>(integrator_type_, integration_step_);

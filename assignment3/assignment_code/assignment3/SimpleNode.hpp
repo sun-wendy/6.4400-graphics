@@ -23,6 +23,11 @@ class SimpleNode : public SceneNode {
             sphere_node->GetTransform().SetPosition(glm::vec3(-1, 1, 1));
             sphere_node->CreateComponent<ShadingComponent>(shader);
             sphere_node->CreateComponent<RenderingComponent>(sphere_mesh);
+            sphere_node->CreateComponent<MaterialComponent>(std::make_shared<Material>(Material::GetDefault()));
+            auto material_component = sphere_node->GetComponentPtr<MaterialComponent>();
+            Material& material = material_component->GetMaterial();
+            material.SetDiffuseColor(glm::vec3(0.0f, 0.0f, 1.0f));
+            material.SetAmbientColor(glm::vec3(0.0f, 0.0f, 1.0f));
 
             sphere_node_ = sphere_node.get();
             AddChild(std::move(sphere_node));
@@ -34,7 +39,6 @@ class SimpleNode : public SceneNode {
 
             type_ = type;
             integrator_ = IntegratorFactory::CreateIntegrator<SimpleSystem, ParticleState>(type_);
-
             step_size_ = step_size;
             time_ = 0.0;
         }

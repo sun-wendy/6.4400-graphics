@@ -29,6 +29,11 @@ class PendulumNode : public SceneNode {
             system_.AddMass(0.5f);
             sphere_node_one->CreateComponent<ShadingComponent>(shader_);
             sphere_node_one->CreateComponent<RenderingComponent>(sphere_mesh_);
+            sphere_node_one->CreateComponent<MaterialComponent>(std::make_shared<Material>(Material::GetDefault()));
+            auto material_component_one = sphere_node_one->GetComponentPtr<MaterialComponent>();
+            Material& material_one = material_component_one->GetMaterial();
+            material_one.SetDiffuseColor(glm::vec3(0.0f, 1.0f, 0.0f));
+            material_one.SetAmbientColor(glm::vec3(0.0f, 1.0f, 0.0f));
             sphere_nodes_.push_back(sphere_node_one.get());
             AddChild(std::move(sphere_node_one));
 
@@ -40,6 +45,11 @@ class PendulumNode : public SceneNode {
             system_.AddSpring(0, 1, 0.5f, 0.5f);
             sphere_node_two->CreateComponent<ShadingComponent>(shader_);
             sphere_node_two->CreateComponent<RenderingComponent>(sphere_mesh_);
+            sphere_node_two->CreateComponent<MaterialComponent>(std::make_shared<Material>(Material::GetDefault()));
+            auto material_component_two = sphere_node_two->GetComponentPtr<MaterialComponent>();
+            Material& material_two = material_component_two->GetMaterial();
+            material_two.SetDiffuseColor(glm::vec3(0.0f, 1.0f, 0.0f));
+            material_two.SetAmbientColor(glm::vec3(0.0f, 1.0f, 0.0f));
             sphere_nodes_.push_back(sphere_node_two.get());
             AddChild(std::move(sphere_node_two));
 
@@ -51,6 +61,11 @@ class PendulumNode : public SceneNode {
             system_.AddSpring(1, 2, 0.5f, 0.5f);
             sphere_node_three->CreateComponent<ShadingComponent>(shader_);
             sphere_node_three->CreateComponent<RenderingComponent>(sphere_mesh_);
+            sphere_node_three->CreateComponent<MaterialComponent>(std::make_shared<Material>(Material::GetDefault()));
+            auto material_component_three = sphere_node_three->GetComponentPtr<MaterialComponent>();
+            Material& material_three = material_component_three->GetMaterial();
+            material_three.SetDiffuseColor(glm::vec3(0.0f, 1.0f, 0.0f));
+            material_three.SetAmbientColor(glm::vec3(0.0f, 1.0f, 0.0f));
             sphere_nodes_.push_back(sphere_node_three.get());
             AddChild(std::move(sphere_node_three));
 
@@ -62,6 +77,11 @@ class PendulumNode : public SceneNode {
             system_.AddSpring(2, 3, 0.5f, 0.5f);
             sphere_node_four->CreateComponent<ShadingComponent>(shader_);
             sphere_node_four->CreateComponent<RenderingComponent>(sphere_mesh_);
+            sphere_node_four->CreateComponent<MaterialComponent>(std::make_shared<Material>(Material::GetDefault()));
+            auto material_component_four = sphere_node_four->GetComponentPtr<MaterialComponent>();
+            Material& material_four = material_component_four->GetMaterial();
+            material_four.SetDiffuseColor(glm::vec3(0.0f, 1.0f, 0.0f));
+            material_four.SetAmbientColor(glm::vec3(0.0f, 1.0f, 0.0f));
             sphere_nodes_.push_back(sphere_node_four.get());
             AddChild(std::move(sphere_node_four));
 
@@ -69,7 +89,6 @@ class PendulumNode : public SceneNode {
 
             type_ = type;
             integrator_ = IntegratorFactory::CreateIntegrator<PendulumSystem, ParticleState>(type_);
-
             step_size_ = step_size;
             time_ = 0.0;
         }
