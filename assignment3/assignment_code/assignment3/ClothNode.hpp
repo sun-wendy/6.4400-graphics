@@ -159,60 +159,62 @@ class ClothNode : public SceneNode {
 
 
         void Update(double delta_time) override {
-            state_ = integrator_->Integrate(system_, state_, time_, step_size_);
-            
-            // Update sphere pos
-            auto cloth_positions = make_unique<PositionArray>();
+            for (int i = 0; i < delta_time / step_size_; i++) {
+                state_ = integrator_->Integrate(system_, state_, time_, step_size_);
+                
+                // Update sphere pos
+                auto cloth_positions = make_unique<PositionArray>();
 
-            for (int i = 0; i < sphere_nodes_.size(); i++) {
-                sphere_nodes_[i]->GetTransform().SetPosition(state_.positions[i]);
-                cloth_positions->push_back(state_.positions[i]);
+                for (int i = 0; i < sphere_nodes_.size(); i++) {
+                    sphere_nodes_[i]->GetTransform().SetPosition(state_.positions[i]);
+                    cloth_positions->push_back(state_.positions[i]);
+                }
+
+                cloth_mesh_->UpdatePositions(std::move(cloth_positions));
+
+                // Update normals
+                auto new_normals = make_unique<NormalArray>();
+                std::vector<glm::vec3> normals;
+                size_t pos_size = cloth_mesh_->GetPositions().size();
+                auto new_pos = cloth_mesh_->GetPositions();
+                std::vector<float> vtx_weights(pos_size, 0.0f);
+                auto cloth_indices = cloth_mesh_->GetIndices();
+
+                for (size_t i = 0; i < pos_size; i++) {
+                    normals.push_back(glm::vec3(0, 0, 0));
+                }
+
+                for (size_t i = 0; i < cloth_indices.size() - 2; i += 3) {
+                    int v1 = cloth_indices[i];
+                    int v2 = cloth_indices[i+2];
+                    int v3 = cloth_indices[i+1];
+
+                    auto e1_e2 = glm::cross(new_pos[v1] - new_pos[v2], new_pos[v3] - new_pos[v2]);
+                    float length = glm::length(e1_e2);
+                    glm::vec3 face_normal = e1_e2 / length;
+                    float face_weight = 0.5 * length;
+
+                    vtx_weights[v1] += face_weight;
+                    vtx_weights[v2] += face_weight;
+                    vtx_weights[v3] += face_weight;
+
+                    normals[v1] += face_weight * face_normal;
+                    normals[v2] += face_weight * face_normal;
+                    normals[v3] += face_weight * face_normal;
+                }
+
+                for (size_t i = 0; i < normals.size(); i++) {
+                    normals[i] /= vtx_weights[i];
+                }
+
+                for (auto normal : normals) {
+                    new_normals->push_back(normal);
+                }
+
+                cloth_mesh_->UpdateNormals(std::move(new_normals));
+
+                time_ += step_size_;
             }
-
-            cloth_mesh_->UpdatePositions(std::move(cloth_positions));
-
-            // Update normals
-            auto new_normals = make_unique<NormalArray>();
-            std::vector<glm::vec3> normals;
-            size_t pos_size = cloth_mesh_->GetPositions().size();
-            auto new_pos = cloth_mesh_->GetPositions();
-            std::vector<float> vtx_weights(pos_size, 0.0f);
-            auto cloth_indices = cloth_mesh_->GetIndices();
-
-            for (size_t i = 0; i < pos_size; i++) {
-                normals.push_back(glm::vec3(0, 0, 0));
-            }
-
-            for (size_t i = 0; i < cloth_indices.size() - 2; i += 3) {
-                int v1 = cloth_indices[i];
-                int v2 = cloth_indices[i+2];
-                int v3 = cloth_indices[i+1];
-
-                auto e1_e2 = glm::cross(new_pos[v1] - new_pos[v2], new_pos[v3] - new_pos[v2]);
-                float length = glm::length(e1_e2);
-                glm::vec3 face_normal = e1_e2 / length;
-                float face_weight = 0.5 * length;
-
-                vtx_weights[v1] += face_weight;
-                vtx_weights[v2] += face_weight;
-                vtx_weights[v3] += face_weight;
-
-                normals[v1] += face_weight * face_normal;
-                normals[v2] += face_weight * face_normal;
-                normals[v3] += face_weight * face_normal;
-            }
-
-            for (size_t i = 0; i < normals.size(); i++) {
-                normals[i] /= vtx_weights[i];
-            }
-
-            for (auto normal : normals) {
-                new_normals->push_back(normal);
-            }
-
-            cloth_mesh_->UpdateNormals(std::move(new_normals));
-
-            time_ += delta_time;
 
             // Wire 'R' key to reset cloth
             static bool r_prev_released = true;
@@ -221,12 +223,12 @@ class ClothNode : public SceneNode {
                     Reset();
                 }
                 r_prev_released = false;
-            } else{
+            } else {
                 r_prev_released = true;
             }
         }
 
-
+        
         void Reset() {
             state_ = ParticleState();
             system_ = ClothSystem();

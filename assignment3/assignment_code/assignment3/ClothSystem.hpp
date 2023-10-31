@@ -90,11 +90,9 @@ class ClothSystem : public ParticleSystemBase {
          return i * sqrt(masses_.size()) + j;
       }
 
-      // void RandomWind() {
-      //    // Add a random wind force to the cloth
-      //    // Add a random acceleration to all particles
-
-      // }
+      void AddRandomWind() {
+         // Increment each component of acceleration by a random value between -0.1 and 0.1
+      }
 
    private:
       std::vector<float> masses_;
@@ -102,7 +100,6 @@ class ClothSystem : public ParticleSystemBase {
       std::vector<std::vector<float>> rest_leng_;
       std::vector<std::vector<float>> spring_cons_;
       float drag_cons_ = 0.01f;
-      ParticleState derivative_;
 };
 }  // namespace GLOO
 

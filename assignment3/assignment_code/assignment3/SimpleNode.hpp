@@ -44,9 +44,11 @@ class SimpleNode : public SceneNode {
         }
 
         void Update(double delta_time) override {
-            state_ = integrator_->Integrate(system_, state_, time_, step_size_);
-            sphere_node_->GetTransform().SetPosition(state_.positions[0]);
-            time_ += delta_time;
+            for (int i = 0; i < delta_time / step_size_; i++) {
+                state_ = integrator_->Integrate(system_, state_, time_, step_size_);
+                sphere_node_->GetTransform().SetPosition(state_.positions[0]);
+                time_ += step_size_;
+            }
         }
 
     private:

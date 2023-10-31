@@ -94,13 +94,13 @@ class PendulumNode : public SceneNode {
         }
 
         void Update(double delta_time) override {
-            state_ = integrator_->Integrate(system_, state_, time_, step_size_);
-            
-            for (int i = 0; i < sphere_nodes_.size(); i++) {
-                sphere_nodes_[i]->GetTransform().SetPosition(state_.positions[i]);
+            for (int i = 0; i < delta_time / step_size_; i++) {
+                state_ = integrator_->Integrate(system_, state_, time_, step_size_);
+                for (int j = 0; j < sphere_nodes_.size(); j++) {
+                    sphere_nodes_[j]->GetTransform().SetPosition(state_.positions[j]);
+                }
+                time_ += step_size_;
             }
-
-            time_ += delta_time;
         }
 
     private:
