@@ -37,7 +37,7 @@ class ClothNode : public SceneNode {
 
             for (int j = 0; j < 8; j++) {
                 for (int i = 0; i < 8; i++) {
-                    glm::vec3 pos((j + 2) * 0.5, -i * 0.05, i * 0.15);
+                    glm::vec3 pos((j + 4) * 0.2, -i * 0.05, i * 0.2);
                     int idx = system_.IndexOf(i, j);
                     sphere_nodes_[idx]->GetTransform().SetPosition(pos);
                     state_.positions.push_back(pos);
@@ -59,24 +59,30 @@ class ClothNode : public SceneNode {
             // Add structural springs
             for (int j = 0; j < 8; j++) {
                 for (int i = 0; i < 7; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), 0.3f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), 0.3f, 0.3f);
+                    float rest_len_one = glm::length(state_.positions[system_.IndexOf(i, j)] - state_.positions[system_.IndexOf(i + 1, j)]);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), rest_len_one, 0.3f);
+                    float rest_len_two = glm::length(state_.positions[system_.IndexOf(j, i)] - state_.positions[system_.IndexOf(j, i + 1)]);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), rest_len_two, 0.3f);
                 }
             }
 
             // Add shear springs
             for (int j = 0; j < 7; j++) {
                 for (int i = 0; i < 7; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), 0.3f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), 0.3f, 0.3f);
+                    float rest_len_one = glm::length(state_.positions[system_.IndexOf(i, j)] - state_.positions[system_.IndexOf(i + 1, j + 1)]);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), rest_len_one, 0.3f);
+                    float rest_len_two = glm::length(state_.positions[system_.IndexOf(i + 1, j)] - state_.positions[system_.IndexOf(i, j + 1)]);
+                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), rest_len_two, 0.3f);
                 }
             }
 
             // Add flex springs
             for (int j = 0; j < 8; j++) {
                 for (int i = 0; i < 6; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), 0.3f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), 0.3f, 0.3f);
+                    float rest_len_one = glm::length(state_.positions[system_.IndexOf(i, j)] - state_.positions[system_.IndexOf(i + 2, j)]);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), rest_len_one, 0.3f);
+                    float rest_len_two = glm::length(state_.positions[system_.IndexOf(j, i)] - state_.positions[system_.IndexOf(j, i + 2)]);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), rest_len_two, 0.3f);
                 }
             }
 
@@ -261,24 +267,30 @@ class ClothNode : public SceneNode {
             // Reset structural springs
             for (int j = 0; j < 8; j++) {
                 for (int i = 0; i < 7; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), 0.3f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), 0.3f, 0.3f);
+                    float rest_len_one = glm::length(state_.positions[system_.IndexOf(i, j)] - state_.positions[system_.IndexOf(i + 1, j)]);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), rest_len_one, 0.3f);
+                    float rest_len_two = glm::length(state_.positions[system_.IndexOf(j, i)] - state_.positions[system_.IndexOf(j, i + 1)]);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), rest_len_two, 0.3f);
                 }
             }
 
             // Reset shear springs
             for (int j = 0; j < 7; j++) {
                 for (int i = 0; i < 7; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), 0.3f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), 0.3f, 0.3f);
+                    float rest_len_one = glm::length(state_.positions[system_.IndexOf(i, j)] - state_.positions[system_.IndexOf(i + 1, j + 1)]);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), rest_len_one, 0.3f);
+                    float rest_len_two = glm::length(state_.positions[system_.IndexOf(i + 1, j)] - state_.positions[system_.IndexOf(i, j + 1)]);
+                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), rest_len_two, 0.3f);
                 }
             }
 
             // Reset flex springs
             for (int j = 0; j < 8; j++) {
                 for (int i = 0; i < 6; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), 0.3f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), 0.3f, 0.3f);
+                    float rest_len_one = glm::length(state_.positions[system_.IndexOf(i, j)] - state_.positions[system_.IndexOf(i + 2, j)]);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), rest_len_one, 0.3f);
+                    float rest_len_two = glm::length(state_.positions[system_.IndexOf(j, i)] - state_.positions[system_.IndexOf(j, i + 2)]);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), rest_len_two, 0.3f);
                 }
             }
 
