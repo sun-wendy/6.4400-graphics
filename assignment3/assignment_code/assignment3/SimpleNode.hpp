@@ -20,7 +20,7 @@ class SimpleNode : public SceneNode {
             std::shared_ptr<ShaderProgram> shader = std::make_shared<PhongShader>();
 
             auto sphere_node = make_unique<SceneNode>();
-            sphere_node->GetTransform().SetPosition(glm::vec3(-1, 1, 1));
+            sphere_node->GetTransform().SetPosition(glm::vec3(-0.5, 0, 0));
             sphere_node->CreateComponent<ShadingComponent>(shader);
             sphere_node->CreateComponent<RenderingComponent>(sphere_mesh);
             sphere_node->CreateComponent<MaterialComponent>(std::make_shared<Material>(Material::GetDefault()));
@@ -33,7 +33,7 @@ class SimpleNode : public SceneNode {
             AddChild(std::move(sphere_node));
 
             state_ = ParticleState();
-            state_.positions.push_back(glm::vec3(-1, 1, 1));
+            state_.positions.push_back(glm::vec3(-0.5, 0, 0));
             state_.velocities.push_back(glm::vec3(0, 0, 0));
             system_ = SimpleSystem();
 

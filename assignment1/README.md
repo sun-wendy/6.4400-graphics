@@ -27,7 +27,7 @@ I went to Office Hours a couple times for debugging. I collaborated with Jiachen
 ### References
 
 I used references for creating three new artifacts **(the images could be found in [the Images folder](/images/))**.
-* My first curve artifact is a circle. I referenced [this Stack Overflow page](https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves) as well as [this article](https://spencermortensen.com/articles/bezier-circle/) for calculating control points for the four curves that make up a circle;
+* My first curve artifact is a circle. I referenced [this Stack Overflow page](https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves) as well as [this article](https://spencermortensen.com/articles/bezier-circle/) for calculating control points for the four curves that make up a circle.
 * My second patch artifact is an abstract teacup (actually very abstract). My collaborator Jiacheng Zhu introduced me to [this web page](https://people.sc.fsu.edu/~jburkardt/data/bezier_surface/bezier_surface.html) that has a file for a teacup object.
 * My third patch artifact is a bowl-shaped object. I built upon the pattern I found in the circle and the teapot splines to render the bowl.
 <br><br>

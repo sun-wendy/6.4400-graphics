@@ -17,7 +17,7 @@ namespace GLOO {
 class ClothNode : public SceneNode {
     public:
         ClothNode(IntegratorType type, float step_size) {
-            sphere_mesh_ = PrimitiveFactory::CreateSphere(0.03f, 20, 20);
+            sphere_mesh_ = PrimitiveFactory::CreateSphere(0.02f, 20, 20);
             shader_ = std::make_shared<PhongShader>();
 
             state_ = ParticleState();
@@ -25,8 +25,8 @@ class ClothNode : public SceneNode {
 
             auto cloth_positions = make_unique<PositionArray>();
 
-            for (int j = 0; j < 6; j++) {
-                for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 8; j++) {
+                for (int i = 0; i < 8; i++) {
                     auto sphere_node = make_unique<SceneNode>();
                     sphere_node->CreateComponent<ShadingComponent>(shader_);
                     sphere_node->CreateComponent<RenderingComponent>(sphere_mesh_);
@@ -35,9 +35,9 @@ class ClothNode : public SceneNode {
                 }
             }
 
-            for (int j = 0; j < 6; j++) {
-                for (int i = 0; i < 6; i++) {
-                    glm::vec3 pos((j + 2) * 0.5, -i * 0.05, i * 0.5);
+            for (int j = 0; j < 8; j++) {
+                for (int i = 0; i < 8; i++) {
+                    glm::vec3 pos((j + 2) * 0.5, -i * 0.05, i * 0.15);
                     int idx = system_.IndexOf(i, j);
                     sphere_nodes_[idx]->GetTransform().SetPosition(pos);
                     state_.positions.push_back(pos);
@@ -57,26 +57,26 @@ class ClothNode : public SceneNode {
             }
 
             // Add structural springs
-            for (int j = 0; j < 6; j++) {
-                for (int i = 0; i < 5; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), 0.4f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), 0.4f, 0.3f);
+            for (int j = 0; j < 8; j++) {
+                for (int i = 0; i < 7; i++) {
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), 0.3f, 0.3f);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), 0.3f, 0.3f);
                 }
             }
 
             // Add shear springs
-            for (int j = 0; j < 5; j++) {
-                for (int i = 0; i < 5; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), 0.4f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), 0.4f, 0.3f);
+            for (int j = 0; j < 7; j++) {
+                for (int i = 0; i < 7; i++) {
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), 0.3f, 0.3f);
+                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), 0.3f, 0.3f);
                 }
             }
 
             // Add flex springs
-            for (int j = 0; j < 6; j++) {
-                for (int i = 0; i < 4; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), 0.4f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), 0.4f, 0.3f);
+            for (int j = 0; j < 8; j++) {
+                for (int i = 0; i < 6; i++) {
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), 0.3f, 0.3f);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), 0.3f, 0.3f);
                 }
             }
 
@@ -89,8 +89,8 @@ class ClothNode : public SceneNode {
             cloth_mesh_ = std::make_shared<VertexObject>();
             auto indices = make_unique<IndexArray>();
 
-            for (int j = 0; j < 5; j++) {
-                for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 7; j++) {
+                for (int i = 0; i < 7; i++) {
                     int here = system_.IndexOf(i, j);
                     int right = system_.IndexOf(i + 1, j);
                     int down = system_.IndexOf(i, j + 1);
@@ -244,26 +244,26 @@ class ClothNode : public SceneNode {
             }
 
             // Reset structural springs
-            for (int j = 0; j < 6; j++) {
-                for (int i = 0; i < 5; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), 0.5f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), 0.5f, 0.3f);
+            for (int j = 0; j < 8; j++) {
+                for (int i = 0; i < 7; i++) {
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), 0.3f, 0.3f);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), 0.3f, 0.3f);
                 }
             }
 
             // Reset shear springs
-            for (int j = 0; j < 5; j++) {
-                for (int i = 0; i < 5; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), 0.5f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), 0.5f, 0.3f);
+            for (int j = 0; j < 7; j++) {
+                for (int i = 0; i < 7; i++) {
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), 0.3f, 0.3f);
+                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), 0.3f, 0.3f);
                 }
             }
 
             // Reset flex springs
-            for (int j = 0; j < 6; j++) {
-                for (int i = 0; i < 4; i++) {
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), 0.5f, 0.3f);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), 0.5f, 0.3f);
+            for (int j = 0; j < 8; j++) {
+                for (int i = 0; i < 6; i++) {
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), 0.3f, 0.3f);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), 0.3f, 0.3f);
                 }
             }
 
