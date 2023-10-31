@@ -14,7 +14,7 @@ In this assignment, I implemented the following functionalities:
 
 * Wired the `R` key to reset the cloth, which then naturally falls out of screen due to gravity force;
 
-* Wired the `A` key add a random wind to the cloth system.
+* Wired the `W` key add a random wind to the cloth system.
 <br><br>
 
 
@@ -46,7 +46,7 @@ There is no known problem with my code. **Screenshots of the three systems are i
 
 I completed two easy extra-credit problems:
 * Rather than display cloth as a wireframe mesh, I implemented smooth shading. I used the code for rendering patch from Assignment 1, as well as the code for computing surface normals from Assignment 2;
-* Added a random wind force to my cloth simulation. Can toggle it on and off using `A` key.
+* Added a random wind force to my cloth simulation. Can toggle it on and off using `W` key.
 <br><br>
 
 

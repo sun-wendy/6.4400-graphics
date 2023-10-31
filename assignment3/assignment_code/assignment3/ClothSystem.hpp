@@ -38,7 +38,13 @@ class ClothSystem : public ParticleSystemBase {
             if (fixed_[i] == 1 || masses_[i] == 0.0f) {
                accelerations.push_back(glm::vec3(0.0f));
             } else{
-               accelerations.push_back((gravity[i] + drag[i] + spring_forces[i]) / masses_[i]);
+               if (!wind_on_) {
+                  accelerations.push_back((gravity[i] + drag[i] + spring_forces[i]) / masses_[i]);
+               } else {
+                  float rand_num = static_cast <float> (rand()) / static_cast <float> (RAND_MAX / 0.1f);
+                  glm::vec3 wind = glm::vec3(rand_num, 0.0f, 0.0f);
+                  accelerations.push_back((gravity[i] + drag[i] + spring_forces[i] + wind) / masses_[i]);
+               }
             }
          }
          
@@ -91,7 +97,15 @@ class ClothSystem : public ParticleSystemBase {
       }
 
       void AddRandomWind() {
-         // Increment each component of acceleration by a random value between -0.1 and 0.1
+         wind_on_ = true;
+      }
+
+      void RemoveWind() {
+         wind_on_ = false;
+      }
+
+      bool IsWindOn() {
+         return wind_on_;
       }
 
    private:
@@ -100,6 +114,7 @@ class ClothSystem : public ParticleSystemBase {
       std::vector<std::vector<float>> rest_leng_;
       std::vector<std::vector<float>> spring_cons_;
       float drag_cons_ = 0.01f;
+      bool wind_on_ = false;
 };
 }  // namespace GLOO
 

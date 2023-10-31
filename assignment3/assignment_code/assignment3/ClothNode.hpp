@@ -226,6 +226,21 @@ class ClothNode : public SceneNode {
             } else {
                 r_prev_released = true;
             }
+
+            // Wire the 'W' key to toggle wind
+            static bool w_prev_released = true;
+            if (InputManager::GetInstance().IsKeyPressed('W')) {
+                if (w_prev_released) {
+                    if (system_.IsWindOn()) {
+                        system_.RemoveWind();
+                    } else {
+                        system_.AddRandomWind();
+                    }
+                }
+                w_prev_released = false;
+            } else {
+                w_prev_released = true;
+            }
         }
 
         
