@@ -21,12 +21,14 @@ In this assignment, I implemented the following functionalities:
 ### Compile & Run Code
 
 I followed the steps on the assignment page to compile and run my code, and I didn't run into any compilation error. I used MacOS.
+<br>
+For viewing all three systems together, RK4 integrator along with step size 0.005 works well.
 <br><br>
 
 
 ### Collaboration
 
-I collaborated with Liane Xu, Karen Ma, and Alan Yu for general debugging. I went to Office Hours a couple times for debugging.
+I collaborated with Liane Xu, Karen Ma, and Alan Yu for general debugging. I went to Office Hours a couple times.
 <br><br>
 
 
@@ -38,7 +40,7 @@ No outside reference used.
 
 ### Known Problems with My Code
 
-There is no known problem with my code. **Screenshots of the three systems are in [the Images folder](/images/)**.
+There is no known problem with my code. **Screenshots of the three systems are in [the Images folder](/images/)**. Note that use mouse to change the view direction a bit to get a clearer view of the cloth. To better see that normals are correctly implemented for shading, it's easier to turn on wind with `W` key to add some movement to the cloth.
 <br><br>
 
 

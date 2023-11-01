@@ -53,25 +53,17 @@ class PendulumSystem : public ParticleSystemBase {
          fixed_.push_back(0);
 
          if (masses_.size() == 0) {
-            std::vector<float> init_row_rest_leng;
-            std::vector<float> init_row_spring_cons;
-            init_row_rest_leng.push_back(0.0f);
-            init_row_spring_cons.push_back(0.0f);
-            rest_leng_.push_back(init_row_rest_leng);
-            spring_cons_.push_back(init_row_spring_cons);
+            rest_leng_.push_back(std::vector<float>(1, 0.0f));
+            spring_cons_.push_back(std::vector<float>(1, 0.0f));
          } else {
-            std::vector<float> new_row_rest_leng;
-            std::vector<float> new_row_spring_cons;
-            for (int i = 0; i < rest_leng_.size(); i++) {
-               rest_leng_[i].push_back(0.0f);
-               new_row_rest_leng.push_back(0.0f);
-               spring_cons_[i].push_back(0.0f);
-               new_row_spring_cons.push_back(0.0f);
-            }
-            new_row_rest_leng.push_back(0.0f);
-            new_row_spring_cons.push_back(0.0f);
+            std::vector<float> new_row_rest_leng(masses_.size(), 0.0f);
+            std::vector<float> new_row_spring_cons(masses_.size(), 0.0f);
             rest_leng_.push_back(new_row_rest_leng);
             spring_cons_.push_back(new_row_spring_cons);
+            for (int i = 0; i < rest_leng_.size(); i++) {
+               rest_leng_[i].push_back(0.0f);
+               spring_cons_[i].push_back(0.0f);
+            }
          }
       }
 

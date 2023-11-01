@@ -62,7 +62,7 @@ class ClothNode : public SceneNode {
                     float rest_len_one = glm::length(state_.positions[system_.IndexOf(i, j)] - state_.positions[system_.IndexOf(i + 1, j)]);
                     system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), rest_len_one, 0.3f);
                     float rest_len_two = glm::length(state_.positions[system_.IndexOf(j, i)] - state_.positions[system_.IndexOf(j, i + 1)]);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), rest_len_two, 0.3f);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), 0.3f, 0.3f);
                 }
             }
 
@@ -70,9 +70,9 @@ class ClothNode : public SceneNode {
             for (int j = 0; j < 7; j++) {
                 for (int i = 0; i < 7; i++) {
                     float rest_len_one = glm::length(state_.positions[system_.IndexOf(i, j)] - state_.positions[system_.IndexOf(i + 1, j + 1)]);
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), rest_len_one, 0.3f);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), 0.3f, 0.3f);
                     float rest_len_two = glm::length(state_.positions[system_.IndexOf(i + 1, j)] - state_.positions[system_.IndexOf(i, j + 1)]);
-                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), rest_len_two, 0.3f);
+                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), 0.3f, 0.3f);
                 }
             }
 
@@ -80,9 +80,9 @@ class ClothNode : public SceneNode {
             for (int j = 0; j < 8; j++) {
                 for (int i = 0; i < 6; i++) {
                     float rest_len_one = glm::length(state_.positions[system_.IndexOf(i, j)] - state_.positions[system_.IndexOf(i + 2, j)]);
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), rest_len_one, 0.3f);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), 0.3f, 0.3f);
                     float rest_len_two = glm::length(state_.positions[system_.IndexOf(j, i)] - state_.positions[system_.IndexOf(j, i + 2)]);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), rest_len_two, 0.3f);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), 0.3f, 0.3f);
                 }
             }
 
@@ -91,30 +91,30 @@ class ClothNode : public SceneNode {
             step_size_ = step_size;
             time_ = 0.0;
 
-            // Render cloth
+            // Render cloth (similar to Assignment 1)
             cloth_mesh_ = std::make_shared<VertexObject>();
             auto indices = make_unique<IndexArray>();
 
             for (int j = 0; j < 7; j++) {
                 for (int i = 0; i < 7; i++) {
-                    int here = system_.IndexOf(i, j);
-                    int right = system_.IndexOf(i + 1, j);
-                    int down = system_.IndexOf(i, j + 1);
-                    int diag = system_.IndexOf(i + 1, j + 1);
+                    int p0 = system_.IndexOf(i, j);
+                    int p1 = system_.IndexOf(i + 1, j);
+                    int p2 = system_.IndexOf(i, j + 1);
+                    int p3 = system_.IndexOf(i + 1, j + 1);
 
-                    indices->push_back(down);
-                    indices->push_back(diag);
-                    indices->push_back(here);
-                    indices->push_back(here);
-                    indices->push_back(diag);
-                    indices->push_back(right);
+                    indices->push_back(p2);
+                    indices->push_back(p3);
+                    indices->push_back(p0);
+                    indices->push_back(p0);
+                    indices->push_back(p3);
+                    indices->push_back(p1);
                 }
             }
 
             cloth_mesh_->UpdatePositions(std::move(cloth_positions));
             cloth_mesh_->UpdateIndices(std::move(indices));
 
-            // Initialize normals
+            // Initialize normals (same as Assignment 2)
             auto final_normals = make_unique<NormalArray>();
             std::vector<glm::vec3> normals;
             size_t pos_size = cloth_mesh_->GetPositions().size();
@@ -270,7 +270,7 @@ class ClothNode : public SceneNode {
                     float rest_len_one = glm::length(state_.positions[system_.IndexOf(i, j)] - state_.positions[system_.IndexOf(i + 1, j)]);
                     system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j), rest_len_one, 0.3f);
                     float rest_len_two = glm::length(state_.positions[system_.IndexOf(j, i)] - state_.positions[system_.IndexOf(j, i + 1)]);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), rest_len_two, 0.3f);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 1), 0.3f, 0.3f);
                 }
             }
 
@@ -278,9 +278,9 @@ class ClothNode : public SceneNode {
             for (int j = 0; j < 7; j++) {
                 for (int i = 0; i < 7; i++) {
                     float rest_len_one = glm::length(state_.positions[system_.IndexOf(i, j)] - state_.positions[system_.IndexOf(i + 1, j + 1)]);
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), rest_len_one, 0.3f);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 1, j + 1), 0.3f, 0.3f);
                     float rest_len_two = glm::length(state_.positions[system_.IndexOf(i + 1, j)] - state_.positions[system_.IndexOf(i, j + 1)]);
-                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), rest_len_two, 0.3f);
+                    system_.AddSpring(system_.IndexOf(i + 1, j), system_.IndexOf(i, j + 1), 0.3f, 0.3f);
                 }
             }
 
@@ -288,9 +288,9 @@ class ClothNode : public SceneNode {
             for (int j = 0; j < 8; j++) {
                 for (int i = 0; i < 6; i++) {
                     float rest_len_one = glm::length(state_.positions[system_.IndexOf(i, j)] - state_.positions[system_.IndexOf(i + 2, j)]);
-                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), rest_len_one, 0.3f);
+                    system_.AddSpring(system_.IndexOf(i, j), system_.IndexOf(i + 2, j), 0.3f, 0.3f);
                     float rest_len_two = glm::length(state_.positions[system_.IndexOf(j, i)] - state_.positions[system_.IndexOf(j, i + 2)]);
-                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), rest_len_two, 0.3f);
+                    system_.AddSpring(system_.IndexOf(j, i), system_.IndexOf(j, i + 2), 0.3f, 0.3f);
                 }
             }
 

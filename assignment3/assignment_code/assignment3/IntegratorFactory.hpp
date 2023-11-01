@@ -26,7 +26,7 @@ class IntegratorFactory {
     } else if (type == IntegratorType::RK4) {
       return make_unique<RK4Integrator<TSystem, TState>>();
     } else {
-      throw std::runtime_error("Invalid integrator type");
+      throw std::runtime_error("Integrator type not found");
     }
   }
 };
