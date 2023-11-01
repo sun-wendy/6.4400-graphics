@@ -149,8 +149,8 @@ class ClothNode : public SceneNode {
                 normals[i] /= vtx_weights[i];
             }
 
-            for (auto normal : normals) {
-                final_normals->push_back(normal);
+            for (auto single_normal : normals) {
+                final_normals->push_back(single_normal);
             }
 
             cloth_mesh_->UpdateNormals(std::move(final_normals));
@@ -213,8 +213,8 @@ class ClothNode : public SceneNode {
                     normals[i] /= vtx_weights[i];
                 }
 
-                for (auto normal : normals) {
-                    new_normals->push_back(normal);
+                for (auto single_normal : normals) {
+                    new_normals->push_back(single_normal);
                 }
 
                 cloth_mesh_->UpdateNormals(std::move(new_normals));

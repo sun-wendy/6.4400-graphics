@@ -22,7 +22,7 @@ In this assignment, I implemented the following functionalities:
 
 I followed the steps on the assignment page to compile and run my code, and I didn't run into any compilation error. I used MacOS.
 <br><br>
-For viewing all three systems together, RK4 integrator along with step size 0.005 works well.
+For viewing all three systems together, **RK4 integrator along with step size 0.005 works well**.
 <br><br>
 
 
