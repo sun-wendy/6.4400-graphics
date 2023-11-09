@@ -36,6 +36,9 @@ class Tracer {
 
   glm::vec3 GetBackgroundColor(const glm::vec3& direction) const;
 
+  glm::vec3 GetDiffuseShading(glm::vec3& light_dir, glm::vec3& normal, glm::vec3& intensity, glm::vec3& k_diffuse) const;
+  glm::vec3 GetSpecularShading(float shininess, glm::vec3& light_dir, glm::vec3& normal, glm::vec3& surface_to_eye, glm::vec3& intensity, glm::vec3& k_specular) const;
+
   PerspectiveCamera camera_;
   glm::ivec2 image_size_;
   size_t max_bounces_;

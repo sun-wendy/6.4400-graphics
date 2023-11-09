@@ -30,7 +30,7 @@ bool Sphere::Intersect(const Ray& ray, float t_min, HitRecord& record) const {
   } else {
     t = t_minus;
   }
-
+  
   if (t < record.time) {
     record.time = t;
     record.normal = glm::normalize(ray.At(t));
