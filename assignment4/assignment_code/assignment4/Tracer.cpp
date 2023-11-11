@@ -50,6 +50,7 @@ glm::vec3 Tracer::TraceRay(const Ray& ray,
   // return GetBackgroundColor(ray.GetDirection());
 
   glm::vec3 pixel_color(0.0f);
+  bool hit = false;
 
   for (auto& single_tracing : tracing_components_) {
     glm::mat4 transform = single_tracing->GetNodePtr()->GetTransform().GetLocalToWorldMatrix();
@@ -59,6 +60,8 @@ glm::vec3 Tracer::TraceRay(const Ray& ray,
 
     const auto& hittable = single_tracing->GetHittable();
     if (hittable.Intersect(temp_ray, camera_.GetTMin(), record)) {
+      hit = true;
+
       record.normal = glm::normalize(glm::transpose(glm::inverse(glm::mat3(transform))) * record.normal);
       pixel_color = glm::vec3(0.0f);
       
@@ -66,6 +69,7 @@ glm::vec3 Tracer::TraceRay(const Ray& ray,
       const glm::vec3& hit_pos = temp_ray.At(record.time);
 
       glm::vec3 I(0.0f);
+      glm::vec3 I_indirect(0.0f);
 
       for (auto& single_light : light_components_) {
         // Point light & directional light
@@ -96,11 +100,26 @@ glm::vec3 Tracer::TraceRay(const Ray& ray,
         }
       }
 
-      pixel_color += I;
+      // Secondary rays
+      if (bounces > 0) {
+        HitRecord new_record;
+        glm::vec3 R = ray.GetDirection() - 2 * glm::dot(ray.GetDirection(), record.normal) * record.normal;
+        glm::vec3 R_epsilon = R * glm::vec3(0.01);
+        Ray reflected(hit_pos + R_epsilon, R);
+        I_indirect = (TraceRay(reflected, bounces - 1, new_record) * single_tracing->GetNodePtr()->GetComponentPtr<MaterialComponent>()->GetMaterial().GetSpecularColor());
+      }
+
+      pixel_color = I + I_indirect;
     }
   }
 
-  if (record.time < std::numeric_limits<float>::max()) {
+  // if (record.time < std::numeric_limits<float>::max()) {
+  //   return pixel_color;
+  // } else {
+  //   return GetBackgroundColor(ray.GetDirection());
+  // }
+
+  if (hit) {
     return pixel_color;
   } else {
     return GetBackgroundColor(ray.GetDirection());

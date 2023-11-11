@@ -270,6 +270,10 @@ bool Octree::Intersect(const Ray& ray, float t_min, HitRecord& record) {
       ray_dir[dim] = -ray_dir[dim];
       aa |= (1 << (2 - dim));
     }
+
+    if (ray_dir[dim] == 0) {
+      ray_dir[dim] = 10e-9;
+    }
   }
 
   float divx = 1 / ray_dir[0];
