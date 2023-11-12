@@ -87,8 +87,28 @@ glm::vec3 Tracer::TraceRay(const Ray& ray,
           glm::vec3 k_specular = single_tracing->GetNodePtr()->GetComponentPtr<MaterialComponent>()->GetMaterial().GetSpecularColor();
           float shininess = single_tracing->GetNodePtr()->GetComponentPtr<MaterialComponent>()->GetMaterial().GetShininess();
           glm::vec3 I_specular = GetSpecularShading(shininess, dir_to_light, surface_to_eye, record.normal, intensity, k_specular);
-          
-          I += (I_diffuse + I_specular);
+
+          // Check shadow
+          HitRecord shadow_record;
+          glm::vec3 light_dir_epsilon = dir_to_light * glm::vec3(0.01);
+          Ray shadow_ray(hit_pos + light_dir_epsilon, dir_to_light);
+          bool shadow_exists = false;
+
+          for (auto& single_object : tracing_components_) {
+            glm::mat4 transform_shadow = single_object->GetNodePtr()->GetTransform().GetLocalToWorldMatrix();
+            glm::mat4 inv_shadow = glm::inverse(transform_shadow);
+            Ray temp_ray_shadow = shadow_ray;
+            temp_ray_shadow.ApplyTransform(inv_shadow);
+
+            const auto& shadow_hittable = single_object->GetHittable();
+            if (shadow_hittable.Intersect(temp_ray_shadow, camera_.GetTMin(), shadow_record)) {
+              shadow_exists = true;
+            }
+          }
+
+          if (!shadows_enabled_ || !shadow_exists || shadow_record.time > dist_to_light) {
+            I += (I_diffuse + I_specular);
+          }
         }
 
         // Ambient light
@@ -102,11 +122,11 @@ glm::vec3 Tracer::TraceRay(const Ray& ray,
 
       // Secondary rays
       if (bounces > 0) {
-        HitRecord new_record;
+        HitRecord bounce_record;
         glm::vec3 R = ray.GetDirection() - 2 * glm::dot(ray.GetDirection(), record.normal) * record.normal;
         glm::vec3 R_epsilon = R * glm::vec3(0.01);
         Ray reflected(hit_pos + R_epsilon, R);
-        I_indirect = (TraceRay(reflected, bounces - 1, new_record) * single_tracing->GetNodePtr()->GetComponentPtr<MaterialComponent>()->GetMaterial().GetSpecularColor());
+        I_indirect = (TraceRay(reflected, bounces - 1, bounce_record) * single_tracing->GetNodePtr()->GetComponentPtr<MaterialComponent>()->GetMaterial().GetSpecularColor());
       }
 
       pixel_color = I + I_indirect;
