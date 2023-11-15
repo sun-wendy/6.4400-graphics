@@ -30,6 +30,8 @@ No outside reference used.
 
 There is no known problem with my code. **Images of the rendered scenes are in the root directory**.
 <br><br>
+One thing to note is that to keep the line from appearing in `scene06` (as mentioned in Piazza posts), I modified the `octree` implementation as instructed by the Piazza post.
+<br><br>
 
 
 ### Extra Credit
