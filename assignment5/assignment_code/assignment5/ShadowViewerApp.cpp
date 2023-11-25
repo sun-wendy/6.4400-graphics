@@ -75,6 +75,15 @@ void ShadowViewerApp::SetupScene() {
   // RenderingComponent to start at start_face_index of each group, with the
   // number of indices equal to num_indices of the group.
 
+  for (auto& group : mesh_data.groups) {
+    auto node = make_unique<SceneNode>();
+    node->CreateComponent<ShadingComponent>(shader);
+    node->CreateComponent<RenderingComponent>(vertex_obj);
+    node->GetComponentPtr<RenderingComponent>()->SetDrawRange(
+        group.start_face_index, group.num_indices);
+    node->CreateComponent<MaterialComponent>(group.material);
+    root.AddChild(std::move(node));
+  }
 }
 
 }  // namespace GLOO
