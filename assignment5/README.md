@@ -2,7 +2,7 @@
 <br>
 
 In this assignment, I implemented the following functionalities:
-* Create a scene tree;
+* Build a scene tree (first without texture);
 * Create OpenGL texture objects, and user shader to sample from the texture using UV coordinates;
 * Render shadows in real-time using shadow mapping.
 <br><br>
