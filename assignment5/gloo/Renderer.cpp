@@ -12,6 +12,8 @@
 #include "components/ShadingComponent.hpp"
 #include "components/CameraComponent.hpp"
 #include "debug/PrimitiveFactory.hpp"
+#include "gl_wrapper/Framebuffer.hpp"
+#include "shaders/ShadowShader.hpp"
 
 namespace {
 const size_t kShadowWidth = 4096;
@@ -24,6 +26,15 @@ namespace GLOO {
 Renderer::Renderer(Application& application) : application_(application) {
   UNUSED(application_);
   // TODO: you may want to initialize your framebuffer and texture(s) here.
+  shadow_depth_tex_ = make_unique<Texture>();
+  shadow_depth_tex_->Reserve(GL_DEPTH_COMPONENT, kShadowWidth, kShadowHeight, GL_DEPTH_COMPONENT, GL_FLOAT);
+
+  plain_texture_shader_ = make_unique<PlainTextureShader>();
+
+  shadow_buffer_ = make_unique<Framebuffer>();
+  shadow_buffer_->Bind();
+  shadow_buffer_->AssociateTexture(*shadow_depth_tex_, GL_DEPTH_ATTACHMENT);
+  shadow_buffer_->Unbind();
 
   // To render a quad on in the lower-left of the screen, you can assign texture
   // to quad_ created below and then call quad_->GetVertexArray().Render().
@@ -47,6 +58,7 @@ void Renderer::Render(const Scene& scene) const {
   RenderScene(scene);
   // TODO: When debugging your shadow map, call DebugShadowMap to render a
   // quad at the bottom left corner to display the shadow map.
+  DebugShadowMap();
 }
 
 void Renderer::RecursiveRetrieve(const SceneNode& node,
@@ -72,6 +84,21 @@ Renderer::RenderingInfo Renderer::RetrieveRenderingInfo(
   // Efficient implementation without redundant matrix multiplications.
   RecursiveRetrieve(root, info, glm::mat4(1.0f));
   return info;
+}
+
+void Renderer::RenderShadow(LightComponent& light, RenderingInfo& info) const {
+  glm::mat4 world_to_light_ndc = kLightProjection * glm::inverse(light.GetNodePtr()->GetTransform().GetLocalToWorldMatrix());
+
+  
+  for (const auto& pr : info) {
+    auto robj_ptr = pr.first;
+    SceneNode& node = *robj_ptr->GetNodePtr();
+    const auto& shadow_shader_ptr = make_unique<ShadowShader>();
+    BindGuard shader_bg(shadow_shader_ptr.get());
+    shadow_shader_ptr->SetLightCamera(world_to_light_ndc);
+    shadow_shader_ptr->SetTargetNode(node, pr.second);
+    robj_ptr->Render();
+  }
 }
 
 void Renderer::RenderScene(const Scene& scene) const {
@@ -127,6 +154,18 @@ void Renderer::RenderScene(const Scene& scene) const {
     // This should be rendered to the shadow framebuffer instead of the default
     // one. You should only render shadow if the light can cast shadow (e.g.
     // directional light).
+
+    if (light_ptrs.at(light_id)->CanCastShadow()) {
+      shadow_buffer_->Bind();
+      GL_CHECK(glViewport(0, 0, kShadowWidth, kShadowHeight));
+      GL_CHECK(glDepthMask(GL_TRUE));
+      GL_CHECK(glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE));
+      GL_CHECK(glClear(GL_DEPTH_BUFFER_BIT));
+      RenderShadow(*light_ptrs.at(light_id), rendering_info);
+      shadow_buffer_->Unbind();
+    }
+
+    GL_CHECK(glViewport(0, 0, application_.GetWindowSize().x, application_.GetWindowSize().y));
 
     GL_CHECK(glDepthMask(GL_FALSE));
     bool color_mask = GL_TRUE;

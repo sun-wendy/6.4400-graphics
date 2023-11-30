@@ -5,6 +5,7 @@
 #include "components/RenderingComponent.hpp"
 #include "gl_wrapper/Texture.hpp"
 #include "shaders/PlainTextureShader.hpp"
+#include "gl_wrapper/Framebuffer.hpp"
 
 #include <unordered_map>
 
@@ -21,6 +22,7 @@ class Renderer {
   using RenderingInfo = std::vector<std::pair<RenderingComponent*, glm::mat4>>;
   void RenderScene(const Scene& scene) const;
   void SetRenderingOptions() const;
+  void RenderShadow(LightComponent& light, RenderingInfo& info) const;
 
   RenderingInfo RetrieveRenderingInfo(const Scene& scene) const;
   static void RecursiveRetrieve(const SceneNode& node,
@@ -33,6 +35,7 @@ class Renderer {
 
   std::unique_ptr<Texture> shadow_depth_tex_;
   std::unique_ptr<PlainTextureShader> plain_texture_shader_;
+  std::unique_ptr<Framebuffer> shadow_buffer_;
   Application& application_;
 };
 }  // namespace GLOO
