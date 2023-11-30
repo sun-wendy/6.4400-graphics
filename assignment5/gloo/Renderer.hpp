@@ -22,7 +22,7 @@ class Renderer {
   using RenderingInfo = std::vector<std::pair<RenderingComponent*, glm::mat4>>;
   void RenderScene(const Scene& scene) const;
   void SetRenderingOptions() const;
-  void RenderShadow(LightComponent& light, RenderingInfo& info) const;
+  void RenderShadow(LightComponent& light, RenderingInfo& info, glm::mat4& world_to_light_ndc) const;
 
   RenderingInfo RetrieveRenderingInfo(const Scene& scene) const;
   static void RecursiveRetrieve(const SceneNode& node,

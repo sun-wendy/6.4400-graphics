@@ -86,9 +86,8 @@ Renderer::RenderingInfo Renderer::RetrieveRenderingInfo(
   return info;
 }
 
-void Renderer::RenderShadow(LightComponent& light, RenderingInfo& info) const {
-  glm::mat4 world_to_light_ndc = kLightProjection * glm::inverse(light.GetNodePtr()->GetTransform().GetLocalToWorldMatrix());
-
+void Renderer::RenderShadow(LightComponent& light, RenderingInfo& info, glm::mat4& world_to_light_ndc) const {
+  world_to_light_ndc = kLightProjection * glm::inverse(light.GetNodePtr()->GetTransform().GetLocalToWorldMatrix());
   
   for (const auto& pr : info) {
     auto robj_ptr = pr.first;
@@ -155,13 +154,15 @@ void Renderer::RenderScene(const Scene& scene) const {
     // one. You should only render shadow if the light can cast shadow (e.g.
     // directional light).
 
+    glm::mat4 ndc_empty;
+
     if (light_ptrs.at(light_id)->CanCastShadow()) {
       shadow_buffer_->Bind();
       GL_CHECK(glViewport(0, 0, kShadowWidth, kShadowHeight));
       GL_CHECK(glDepthMask(GL_TRUE));
       GL_CHECK(glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE));
       GL_CHECK(glClear(GL_DEPTH_BUFFER_BIT));
-      RenderShadow(*light_ptrs.at(light_id), rendering_info);
+      RenderShadow(*light_ptrs.at(light_id), rendering_info, ndc_empty);
       shadow_buffer_->Unbind();
     }
 
