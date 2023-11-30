@@ -142,7 +142,7 @@ vec3 CalcDirectionalLight(vec3 normal, vec3 view_dir) {
     vec3 final_color = diffuse_color + specular_color;
 
     if (CalcShadow(world_position) > 0.0) {
-        final_color -= vec3(0.3, 0.3, 0.3);
+        return vec3(0.0);
     }
 
     return final_color;
