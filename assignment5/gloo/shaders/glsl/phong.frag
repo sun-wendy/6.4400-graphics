@@ -33,6 +33,8 @@ in vec3 world_normal;
 in vec2 tex_coord;
 
 uniform vec3 camera_position;
+uniform mat4 world_to_light_ndc_matrix;
+uniform sampler2D shadow_texture;
 
 uniform Material material; // material properties of the object
 uniform AmbientLight ambient_light;
@@ -41,6 +43,7 @@ uniform DirectionalLight directional_light;
 vec3 CalcAmbientLight();
 vec3 CalcPointLight(vec3 normal, vec3 view_dir);
 vec3 CalcDirectionalLight(vec3 normal, vec3 view_dir);
+float CalcShadow(vec3 world_position);
 
 uniform sampler2D ambient_sampler;
 uniform sampler2D diffuse_sampler;
@@ -66,6 +69,16 @@ void main() {
     if (directional_light.enabled) {
         frag_color += vec4(CalcDirectionalLight(normal, view_dir), 1.0);
     }
+}
+
+float CalcShadow(vec3 world_position) {
+    vec3 proj_coords = vec3(world_to_light_ndc_matrix * vec4(world_position, 1.0));
+    proj_coords = proj_coords * 0.5 + 0.5;
+    float closest_depth = texture(shadow_texture, proj_coords.xy).r;
+    float cur_depth = proj_coords.z;
+    float bias = 0.005;
+    float shadow = cur_depth - bias > closest_depth ? 1.0 : 0.0;
+    return shadow;
 }
 
 vec3 GetAmbientColor() {
@@ -127,6 +140,11 @@ vec3 CalcDirectionalLight(vec3 normal, vec3 view_dir) {
         light.specular * GetSpecularColor();
 
     vec3 final_color = diffuse_color + specular_color;
+
+    if (CalcShadow(world_position) > 0.0) {
+        final_color -= vec3(0.3, 0.3, 0.3);
+    }
+
     return final_color;
 }
 

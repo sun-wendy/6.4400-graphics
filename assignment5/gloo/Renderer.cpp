@@ -193,6 +193,9 @@ void Renderer::RenderScene(const Scene& scene) const {
       shader->SetLightSource(light);
       // TODO: pass in the shadow texture to the shader via SetShadowMapping if
       // the light can cast shadow.
+      if (light.CanCastShadow()) {
+        shader->SetShadowMapping(*shadow_depth_tex_, ndc_empty);
+      }
 
       robj_ptr->Render();
     }
